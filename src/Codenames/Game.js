@@ -13,6 +13,7 @@ class Game {
     this.masterBoard = new Canvas();
     this.words = new Words.Words(false);
     this.players = new Collection();
+    this.started = false;
     this.teams = {
         red: new Team("red", {game: this}),
         blue: new Team("blue", {game: this})
@@ -40,10 +41,11 @@ class Game {
         this.teams[name] = new Team(name, data);
     }
 
-    configure() {
+    configure(customWords) {
         this.board.drawBoard();
         this.masterBoard.drawBoard();
        const words = Words.Wordlist.random(25, true);
+       if (customWords.length) words.replace(customWords.length, customWords);
        let redNum = Util.rngBtw(8, 9);
        const red = words.fromWhich(redNum, "red");
        const blue = words.fromWhich((redNum == 9) ? 8:9, "blue");
@@ -61,7 +63,8 @@ class Game {
 
     start() {
         if (!this.turn) return;
-        this.channel.send(`**${this.turn} (${this.turn.players.map(p => p.username)})**, it's your turn!`);
+        this.started = true;
+        this.channel.send(`**${this.turn.emoji} | \`${this.turn}\` (${this.turn.players.map(p => p.username)}), it's your turn!**`);
         this.displayBoard();
         this.displayMasterBoard();
         let counter = 1;
@@ -70,18 +73,13 @@ class Game {
         this.timer = setInterval(() => {
             const winner = this.isThereAWinner();
             if (winner) {
-                this.channel.send(`${winner.name} wins!`);
+                this.masterBoard.sendAsMessage(this.channel, `**${winner.emoji} | \`${winner.name}\` (${winner.players.map(p => p.username)}) wins!**`);
                 this.stop();
             }else if (this.turn.guesses === 0) {
-                this.channel.overwritePermissions({
-                    permissionOverwrites: [{
-                        id: this.turn.spymaster.id,
-                        allow: ["SEND_MESSAGES"]
-                    }]
-                 });
+                   this.turn.canEnd = false;
                    this.turn.guesses = false;
                    this.turn = turns[counter];
-                   this.channel.send(`**${this.turn} (${this.turn.players.map(p => p.username)})**, it's your turn!`);
+                   this.channel.send(`**${this.turn.emoji} | \`${this.turn}\` (${this.turn.players.map(p => p.username)}), it's your turn!**`);
                    this.displayBoard();
                    this.displayMasterBoard();
                    if (counter == turns.length - 1) counter = 0;
@@ -91,12 +89,7 @@ class Game {
     }
 
     stop() {
-        if (this.turn && !his.turn.spymaster) this.channel.overwritePermissions({
-            permissionOverwrites: [{
-                id: this.turn.spymaster.id,
-                allow: ["SEND_MESSAGES"]
-            }]
-         });
+        this.started = false;
          for (let [, player] of this.players) {
              player.team = null;
          }
@@ -113,14 +106,14 @@ class Game {
 
 
     displayBoard() {
-       this.board.sendAsMessage(this.channel, `Red: ${this.teams.red.wordsLeft} - Blue: ${this.teams.blue.wordsLeft}`);
+       this.board.sendAsMessage(this.channel, `🔴 ${this.teams.red.wordsLeft} | 🔵 ${this.teams.blue.wordsLeft}`);
     }
 
     displayMasterBoard() {
          for (let word of this.words) {
              word.update(this.masterBoard, true);
          }
-         this.masterBoard.sendAsMessage(this.turn.spymaster, `Your team: ${this.turn}`)
+         this.masterBoard.sendAsMessage(this.turn.spymaster, `**${this.turn.emoji} | Your team: ${this.turn}**`)
     }
 
 

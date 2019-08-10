@@ -9,6 +9,8 @@ class Team {
         this.wordsLeft = options.wordsLeft || 0;
         this.players = options.players || new Collection();
         this.words = options.words;
+        this.emoji = (name == 'red') ? "🔴":"🔵";
+        this.canEnd = false;
         this.guesses = false;
     }
 
@@ -31,6 +33,7 @@ class Team {
         if (word.guessedBy) return 1;
         word.guessedBy = this;
         this.guesses--;
+        if (!this.canEnd) this.canEnd = true;
         word.update(this.game.board, false);
         if (word.type != this.name) {
             if (this.other().name == word.type) this.other().wordsLeft--;

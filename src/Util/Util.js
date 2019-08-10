@@ -20,5 +20,16 @@ module.exports = class Util {
         for (let i=0; i < amount;i++) res += "\xa0";
         return res;
     }
+
+    static awaitConfirmation(channel, filter, time) {
+        return new Promise(async res => {
+              const response = await channel.awaitMessages(filter, {max: 1, time: time});
+              res(response.first());
+        });
+    }
+
+    static hasNoRepeats(arr) {
+        return arr.every(num => arr.indexOf(num) === arr.lastIndexOf(num));
+    }
     
 }

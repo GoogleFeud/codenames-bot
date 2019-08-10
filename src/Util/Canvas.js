@@ -94,9 +94,9 @@ class Canvas {
     }
 
      sizeWord(word) {
-        let fontSize = 45;
+        let fontSize = 55;
         do {
-           this.context.font = `bold ${fontSize -= 15}px sans-serif`
+           this.context.font = `bold ${fontSize -= 20}px sans-serif`
         }while(this.context.measureText(word).width > this.canvas.width - 300);
         return this.context.font;
     }

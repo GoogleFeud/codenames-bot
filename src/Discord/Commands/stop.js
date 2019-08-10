@@ -2,9 +2,11 @@
 module.exports = {
     name: "stop",
     description: "Stop the game!",
+    aliases: ["end"],
     requiresGame: true,
+    requiresGameMaster: true,
     exe(message, args, handler) {
-       if (message.author.id != message.channel.game.master.id) return message.channel.send("**✖ | Only the game master can stop the game!**");
        message.channel.game.stop();
+       message.channel.send("**✔ | Game stopped!**");
     }
 }
