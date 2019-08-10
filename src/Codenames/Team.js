@@ -33,6 +33,7 @@ class Team {
         if (word.guessedBy) return 1;
         word.guessedBy = this;
         this.guesses--;
+        this.game.lastAction = Date.now();
         if (!this.canEnd) this.canEnd = true;
         word.update(this.game.board, false);
         if (word.type != this.name) {

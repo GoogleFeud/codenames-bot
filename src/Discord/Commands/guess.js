@@ -7,7 +7,7 @@ module.exports = {
     usage: ">guess [words]\n>guess plane\n>guess plane bird bomb",
     exe(message, args, handler) {
         if (message.author.team.guesses === false) return message.channel.send("**✖ | The spymaster hasn't given the clue!**");
-       // if (message.author.team.spymaster.id == message.author.id) return message.channel.send("**✖ | The spymaster cannot use this command!**");
+        if (message.author.team.spymaster.id == message.author.id) return message.channel.send("**✖ | The spymaster cannot use this command!**");
        if (args[0].includes(" | ")) args = args[0].split(" | ");
         if (!args.length) return message.channel.send("**✖ | You need to provide at least 1 word!**");
         if (args.length > message.author.team.guesses) return message.channel.send("**✖ | You cannot guess this many words!**");

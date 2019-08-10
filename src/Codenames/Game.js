@@ -13,6 +13,7 @@ class Game {
     this.masterBoard = new Canvas();
     this.words = new Words.Words(false);
     this.players = new Collection();
+    this.lastAction = null;
     this.started = false;
     this.teams = {
         red: new Team("red", {game: this}),
@@ -68,6 +69,7 @@ class Game {
         this.displayBoard();
         this.displayMasterBoard();
         let counter = 1;
+        this.lastAction = Date.now();
         const turns = [this.turn];
         (this.turn.name == 'red') ? turns.push(this.teams.blue):turns.push(this.teams.red);
         this.timer = setInterval(() => {
@@ -85,7 +87,12 @@ class Game {
                    if (counter == turns.length - 1) counter = 0;
                    else counter++;
                }
-        }, 100);
+            else if ((Date.now() - this.lastAction) >= 60000) {
+                this.stop();
+                this.channel.send("** 📤 | Game disbanded. **")
+            }
+            console.log(Date.now() - this.lastAction)
+        }, 1000);
     }
 
     stop() {
