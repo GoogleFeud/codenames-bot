@@ -87,7 +87,7 @@ class Game {
                    if (counter == turns.length - 1) counter = 0;
                    else counter++;
                }
-            else if ((Date.now() - this.lastAction) >= 60000) {
+            else if ((Date.now() - this.lastAction) >= 1200000) {
                 this.stop();
                 this.channel.send("** 📤 | Game disbanded. **")
             }
