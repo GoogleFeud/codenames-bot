@@ -14,6 +14,7 @@ class Coordinate {
 
 class Canvas {
     constructor() {
+        canvas.registerFont("./assets/myfont.otf", {family: "myfontNew-A"})
         this.canvas = new canvas.Canvas(1200, 1200, "png");
         this.context = this.canvas.getContext("2d");
         this.context.fillStyle = "#4a4a4a";
@@ -93,13 +94,13 @@ class Canvas {
         return attachment;
     }
 
-     sizeWord(word) {
-        let fontSize = 55;
+      sizeWord(word) {
+        let fontSize = 43;
         do {
-           this.context.font = `bold ${fontSize -= 20}px sans-serif`
-        }while(this.context.measureText(word).width > this.canvas.width - 300);
+           this.context.font = `bold ${fontSize -= 5}px myfontNew-A`
+        }while(this.context.measureText(word).width > 240);
         return this.context.font;
-    }
+    } 
 
 
 }

@@ -90,8 +90,7 @@ class Game {
             else if ((Date.now() - this.lastAction) >= 1200000) {
                 this.stop();
                 this.channel.send("** 📤 | Game disbanded. **")
-            }
-            console.log(Date.now() - this.lastAction)
+            };
         }, 1000);
     }
 
