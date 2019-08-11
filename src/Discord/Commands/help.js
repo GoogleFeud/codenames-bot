@@ -38,5 +38,3 @@ Enjoying the bot? Upvote it: https://discordbots.org/bot/606487052992905247
     }
 }
 }
-
-.addField('Account age: ', (Date.now() - member.createdAt > yearinms) ? moment(member.createdAt).format('YY'):moment(member.createdAt).format('MM/D/YY HH:mm:ss'));
