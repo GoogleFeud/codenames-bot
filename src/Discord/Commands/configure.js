@@ -11,12 +11,22 @@ module.exports = {
         if (args.length > 25) return message.channel.send("**✖ | The maximum amount of custom words is `25`!**")
         if (args.some(w => w.length > 16)) return message.channel.send("**✖ | One of the custom words is too long! Maximum length is `16`!**");
        }
-       message.channel.game = new Game(message.channel);
+       const id = Util.codeGen();
+       message.channel.game = new Game(message.channel, id);
        message.channel.game.master = message.author;
        message.channel.game.configure(args);
        message.channel.game.displayBoard();
-       setTimeout(() => {
-            if (message.channel.game && message.channel.game.players.size == 0) message.channel.send("** 📤 | Lobby disbanded. **")
-       }, 120000);
+       message.channel.send("**🔌 | Note: The lobby will automatically be disbanded if there is no activity.**")
+       let lastSize = 0;
+       const interval = setInterval(() => {
+             if (message.channel.game && message.channel.game.id === id && !message.channel.game.started) {
+               if (lastSize === message.channel.game.players.size || message.channel.game.players.size === 0) {
+                   message.channel.game.stop();
+                   clearInterval(interval);
+                   return message.channel.send("** 📤 | Game disbanded. **");
+               }
+               lastSize = message.channel.game.players.size;
+             }else clearInterval(interval);
+       }, 60000);
     }
 }

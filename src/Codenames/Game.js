@@ -7,9 +7,10 @@ const Canvas = require("../Util/Canvas.js");
 
 
 class Game {
-    constructor(channel) {
+    constructor(channel, id) {
     this.channel = channel;
     this.board = new Canvas();
+    this.id = id;
     this.masterBoard = new Canvas();
     this.words = new Words.Words(false);
     this.players = new Collection();

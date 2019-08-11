@@ -31,5 +31,9 @@ module.exports = class Util {
     static hasNoRepeats(arr) {
         return arr.every(num => arr.indexOf(num) === arr.lastIndexOf(num));
     }
+
+    static codeGen() {
+        return '_' + Math.random().toString(36).substr(2, 5);
+    }
     
 }
