@@ -1,5 +1,7 @@
 # codenames-bot
 
+![status](https://discordbots.org/api/widget/status/606487052992905247.svg) ![owner](https://discordbots.org/api/widget/owner/606487052992905247.svg) ![servers](https://discordbots.org/api/widget/servers/606487052992905247.svg) ![votes](https://discordbots.org/api/widget/upvotes/606487052992905247.svg)
+
 A fully automated discord bot for playing the award-winning party game [codenames](https://en.wikipedia.org/wiki/Codenames_(board_game)).
 
 ![show](https://i.imgur.com/K9qx1nW.gif)
