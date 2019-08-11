@@ -1,4 +1,4 @@
-//const DBL = require("dblapi.js");
+const DBL = require("dblapi.js");
 
 module.exports = (handler) => {
      const dbl = new DBL(process.env.DBLTOKEN, handler);
