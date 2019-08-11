@@ -12,9 +12,11 @@ module.exports = {
 Use \`-help [command]\` to get more information on a command.
 
 **1. Information -** \`help\`, \`game\`, \`tutorial\`, \`invite\`
-**2. Game -** \`configure\`, \`join\`, \`leave\`, \`start\`, \`clue\`, \`guess\`, \`endturn\`, \`stop\`, \`rng\`
+**2. Game -**  \`clue\`, \`guess\`, \`endturn\`
+**3. Lobby -**  \`configure\`, \`join\`, \`leave\`, \`spymaster\`, \`start\`, \`stop\`, \`rng\`, \`givemaster\`
 
-Found a bug / have suggestions & feedback? Create an issue here: https://github.com/GoogleFeud/codenames-bot/issues
+Found a bug / have suggestions & feedback? Create an issue here: https://github.com/GoogleFeud/codenames-bot/issues/new
+Enjoying the bot? Upvote it: https://discordbots.org/bot/606487052992905247
 `)
     }else {
         const command = handler.findCommand(args[0]);
@@ -36,3 +38,5 @@ Found a bug / have suggestions & feedback? Create an issue here: https://github.
     }
 }
 }
+
+.addField('Account age: ', (Date.now() - member.createdAt > yearinms) ? moment(member.createdAt).format('YY'):moment(member.createdAt).format('MM/D/YY HH:mm:ss'));

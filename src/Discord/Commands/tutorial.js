@@ -14,7 +14,7 @@ module.exports = {
         await Util.awaitConfirmation(message.channel, msg => msg.author.id === message.author.id);
         message.channel.send("```ml\n'Codenames' \"Tutorial\"```\n\nOnce the spymaster has given out the clue, the players of their team have to make guesses. They do that with the `-guess [words]` command. `[words]` can be a single word, for example: `-guess microwave`, or it can be multiple words separated by a space: `-guess microwave horse road`. Players can also end their turn if they want to with the `-endturn` command. Players must make 1 guess before ending their turn.\n\n__Send Anything To Continue__");
         await Util.awaitConfirmation(message.channel, msg => msg.author.id === message.author.id);
-        message.channel.send("```ml\n'Codenames' \"Tutorial\"```\n\nAnd that's it! Have fun using the bot!\n\nTo see the list of all commands, do: `-help`\nFound a bug? Create an issue here: https://github.com/GoogleFeud/codenames-bot/issues\nHave suggestions/feedback? Also create an issue: https://github.com/GoogleFeud/codenames-bot/issues\nEnjoying the bot? Star it!")
+        message.channel.send("```ml\n'Codenames' \"Tutorial\"```\n\nAnd that's it! Have fun using the bot!\n\nTo see the list of all commands, do: `-help`\nFound a bug? Create an issue here: https://github.com/GoogleFeud/codenames-bot/issues/new\nHave suggestions/feedback? Also create an issue: https://github.com/GoogleFeud/codenames-bot/issues/new\nEnjoying the bot? Upvote it: https://discordbots.org/bot/606487052992905247")
 }
 
 }
