@@ -9,6 +9,7 @@ module.exports = {
 **Guilds:** ${handler.guilds.size}
 **Users:** ${handler.users.size}
 **Channels:** ${handler.channels.size}
+**Lobbies Configured:*** ${handler.channels.filter(c => c.game).size}
       `)
     }
 }
