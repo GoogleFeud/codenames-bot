@@ -4,7 +4,7 @@ module.exports = {
     description: "Shows bot statistics!",
     botOwnerOnly: true,
     exe(message, args, handler) {
-      handler.dbl.postStats(handler.guilds.size);
+      if (handler.dbl) handler.dbl.postStats(handler.guilds.size);
       message.channel.send(`
 **Guilds:** ${handler.guilds.size}
 **Users:** ${handler.users.size}
