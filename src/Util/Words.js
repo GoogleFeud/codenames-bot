@@ -38,6 +38,10 @@ class Words extends Array {
             }
     }
 
+    remove(word) {
+        this.splice(this.indexOf(word), 1);
+    }
+
     replace(amount, replacements = [], start = 0) {
          this.splice(start, amount, ...replacements)
     }

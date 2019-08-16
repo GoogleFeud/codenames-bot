@@ -78,6 +78,26 @@ class Canvas {
         this.context.fillText(word, square.x + 120, square.y + 120);
     }
 
+    removeWord(word) {
+        const square = this.rects.find(s => s.word == word);
+        square.word = null;
+        this.context.fillStyle = square.boxColor;
+        this.context.fillRect(square.x, square.y, 240, 240);
+        this.context.strokeStyle="black";
+        this.context.strokeRect(square.x, square.y, 240, 240);
+    }
+
+    replaceWord(old, newW, newC) {
+        const square = this.rects.find(s => s.word == old);
+        this.removeWord(old);
+        square.word = newW;
+        if (newC) square.wordColor = newC;
+        this.context.font = this.sizeWord(newW);
+        this.context.fillStyle = newC || square.wordColor;
+        this.context.textAlign = "center"; 
+        this.context.fillText(newW, square.x + 120, square.y + 120);
+    }
+
 
     saveAsImage(path) {
         fs.writeFileSync(path, this.canvas.toBuffer());

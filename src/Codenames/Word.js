@@ -1,6 +1,4 @@
 
-const Util = require("../Util/Util.js");
-
 const types = {
     neutral: (word, ctx, master) => {
         if (master && !word.guessedBy) return ctx.colorWord(word.word, "white"); 
@@ -36,7 +34,7 @@ const types = {
             ctx.colorWord(word.word, "black");
         }
         return null;
-    }
+    },
 }
 
 

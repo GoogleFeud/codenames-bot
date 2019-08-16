@@ -27,6 +27,6 @@ module.exports = {
                }
                lastSize = message.channel.game.players.size;
              }else clearInterval(interval);
-       }, 60000);
+       }, 240000);
     }
 }
