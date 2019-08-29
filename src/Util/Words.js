@@ -2,18 +2,18 @@ const fs = require('fs');
 const Util = require("./Util.js");
 const Word = require("../Codenames/Word.js");
 
-
 class Words extends Array {
-    constructor() {
-        super();
+    constructor(...items) {
+        super(...items);
     }
 
     random(amount = 1, willDelete = false) {
+        amount = Math.min(this.length, amount);
          let res = new Words();
          while (res.length != amount) {
              let rng = Util.rngArr(this);
              if (!res.includes(rng)) {
-                res.push(rng.toLowerCase());
+                res.push(rng);
                 if (willDelete) this.splice(this.indexOf(rng), 1);
              }
          }
@@ -55,7 +55,7 @@ class Words extends Array {
     }
 
     assassin() {
-        return this.filter(w => w.type == 'assassin' && w.guessedBy)[0];
+        return this.filter(w => w.type == 'assassin' && w.guessedBy);
     }
 
     neutral() {
@@ -72,7 +72,7 @@ class Wordlist extends Words {
     constructor() {
        super();
        const data = fs.readFileSync("./assets/Words.txt", {encoding: 'utf8'});
-       this.push(...data.split("\r\n"));
+       this.push(...data.split("\r\n").map(w => w.toLowerCase()));
     }
   
   }

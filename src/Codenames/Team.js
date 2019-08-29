@@ -9,7 +9,7 @@ class Team {
         this.wordsLeft = options.wordsLeft || 0;
         this.players = options.players || new Collection();
         this.words = options.words;
-        this.emoji = (name == 'red') ? "🔴":"🔵";
+        this.emoji = options.emoji;
         this.canEnd = false;
         this.guesses = false;
     }
@@ -37,7 +37,7 @@ class Team {
         if (!this.canEnd) this.canEnd = true;
         word.update(this.game.board, false);
         if (word.type != this.name) {
-            if (this.other().name == word.type) this.other().wordsLeft--;
+            if (this.game.teams[word.type]) this.game.teams[word.type].wordsLeft--;
             return false;
         }
         else {
@@ -48,6 +48,10 @@ class Team {
 
     toString() {
         return this.name;
+    }
+
+    display() {
+        return this.players.map(p => `${p} ${(this.spymaster) ? (p.id == this.spymaster.id) ? "🕵🏻":"":""}`).join("\n") || "No players!"
     }
 
     other() {
