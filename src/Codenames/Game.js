@@ -17,6 +17,7 @@ class Game {
     this.lastAction = null;
     this.started = false;
     this.turn = null;
+    this.clue = null;
     }
 
     addWord(word, data) {

@@ -44,6 +44,7 @@ class TwoTeamGame extends Game {
             }else if (this.turn.guesses === 0) {
                    this.turn.canEnd = false;
                    this.turn.guesses = false;
+                   this.clue = null;
                    this.turn = turns[counter];
                    this.channel.send(`**${this.turn.emoji} | \`${this.turn}\` (${this.turn.players.map(p => p.username)}), it's your turn!**`);
                    this.displayBoard();

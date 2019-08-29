@@ -12,8 +12,10 @@ module.exports = {
        number = Number(number);
        message.channel.game.lastAction = Date.now();
        if (number > message.channel.game.words.unguessed().size) return message.channel.send(`**✖ | Maximum guesses are ${message.channel.game.words.unguessed().size}**`)
+       message.channel.game.clue = `${word} (${number})`;
        message.channel.send(`${message.author.team.emoji} | Clue for the **${message.author.team}** team: **${word}** (${number})`);
        if (number <= 0) number = 1;
        message.author.team.guesses = number + 1;
+       handler.commands.get("game").exe(message, args, handler);
     }
 }

@@ -20,8 +20,7 @@ class Canvas {
         this.context.fillStyle = "#4a4a4a";
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
         this.rects = [];
-        this.defaultGlobalAlpha = this.context.globalAlpha;
-        this.defaultCompositeOperation = this.context.globalCompositeOperation;
+        this.cache = null;
     }
 
     drawBoard() {
@@ -53,6 +52,7 @@ class Canvas {
         this.context.textAlign = "center"; 
         this.context.fillText(words[i], coords.x + 120, coords.y + 120);
        }
+       if (this.cache) this.cache = null;
     }
 
     colorWordBox(word, color) {
@@ -66,6 +66,7 @@ class Canvas {
        this.context.fillStyle =  square.wordColor;
        this.context.textAlign = "center"; 
        this.context.fillText(word, square.x + 120, square.y + 120);
+       if (this.cache) this.cache = null;
     }
 
 
@@ -76,6 +77,7 @@ class Canvas {
         this.context.font = this.sizeWord(word);
         this.context.textAlign = "center";
         this.context.fillText(word, square.x + 120, square.y + 120);
+        if (this.cache) this.cache = null;
     }
 
     removeWord(word) {
@@ -85,6 +87,7 @@ class Canvas {
         this.context.fillRect(square.x, square.y, 240, 240);
         this.context.strokeStyle="black";
         this.context.strokeRect(square.x, square.y, 240, 240);
+        if (this.cache) this.cache = null;
     }
 
     replaceWord(old, newW, newC) {
@@ -96,21 +99,27 @@ class Canvas {
         this.context.fillStyle = newC || square.wordColor;
         this.context.textAlign = "center"; 
         this.context.fillText(newW, square.x + 120, square.y + 120);
+        if (this.cache) this.cache = null;
     }
 
 
-    saveAsImage(path) {
+    saveAsImage(path) { // Used mostly for testing
         fs.writeFileSync(path, this.canvas.toBuffer());
     }
 
     saveAsLink() {
-       return new MessageAttachment(this.canvas.toBuffer(), "board.png");
+       const buffer = this.cache || this.canvas.toBuffer();
+       const link = new MessageAttachment(buffer, "board.png");
+       if (!this.cache) this.cache = buffer;
+       return link;
     }
 
     sendAsMessage(channel, message) {
-        const attachment = new MessageAttachment(this.canvas.toBuffer(), "board.png");
+        const buffer = this.cache || this.canvas.toBuffer();
+        const attachment = new MessageAttachment(buffer, "board.png");
         if (!message) channel.send(attachment);
         else channel.send(message, {files: [attachment] })
+        if (!this.cache) this.cache = buffer;
         return attachment;
     }
 

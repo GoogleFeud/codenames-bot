@@ -13,6 +13,7 @@ module.exports = {
               team = message.channel.game.teams[team];
               embed.addField(team.name, team.display(), true);
           }
+          if (message.channel.game.clue) embed.addField("Clue:", `Clue for the ${message.channel.game.turn.emoji} team: **${message.channel.game.clue}**`);
           embed.attachFiles([message.channel.game.board.saveAsLink()]);
           message.channel.send(embed);
     }
