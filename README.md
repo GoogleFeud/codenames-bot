@@ -1,5 +1,7 @@
 # codenames-bot
 
+**NEW:** Gamemodes! There is now a 1 team gamemode, where the blue team has to find all their agents and avoid assassins!
+
 ![status](https://discordbots.org/api/widget/status/606487052992905247.svg) ![owner](https://discordbots.org/api/widget/owner/606487052992905247.svg) ![servers](https://discordbots.org/api/widget/servers/606487052992905247.svg) ![votes](https://discordbots.org/api/widget/upvotes/606487052992905247.svg)
 
 A fully automated discord bot for playing the award-winning party game [codenames](https://en.wikipedia.org/wiki/Codenames_(board_game)).
@@ -21,6 +23,7 @@ Do `-tutorial` to see the tutorial. There everything is explained in detail.
 | invite        | Get the bot's invite link!   | N/A |
 | game          | Check the game in this channel  | N/A |
 | tutorial          | Check out the tutorial     | N/A  |
+| gamemodes       | See all gamemodes  | N/A |
 | configure       | Configure a lobby in this channel   | N/A |
 | join          | Join the game in this channel  | `requiresGame` |
 | leave          | Leave the game in this channel | `requiresGame` |

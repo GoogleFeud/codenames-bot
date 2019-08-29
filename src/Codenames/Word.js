@@ -37,14 +37,29 @@ const types = {
     },
 }
 
+const other = {
+    emoji: {
+        red: "🔴",
+        blue: "🔵",
+        neutral: (Math.round(Math.random()) == 1) ? "👱":"👩",
+        assassin: "👤"
+    },
+    real: {
+        red: "red agent",
+        blue: "blue agent",
+        neutral: "bystander",
+        assassin: "assassin"
+    }
+}
+
 
 class Word {
     constructor(word, data = {}) {
         this.word = word;
         this.type = data.type;
         this.guessedBy = data.guessedBy;
-        this.emoji = (this.type == 'red') ? "🔴":(this.type == 'blue')?"🔵":(this.type == "neutral") ? (Math.round(Math.random()) == 1) ? "👱":"👩":"👤";
-        this.clearType = (this.type == "red" || this.type == "blue") ? `${this.type} agent`:(this.type == "neutral") ? "bystander":"assassin";
+        this.emoji = other.emoji[this.type];
+        this.clearType = other.real[this.type];
     }
 
     setType(type) {
