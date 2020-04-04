@@ -37,6 +37,8 @@ Do `-tutorial` to see the tutorial. There everything is explained in detail.
 
 If you want to self-host the bot, clone or fork this repository. Then, do `npm i` in the folder where `package.json` is. **You must have node.js version ^12.0.0 installed.**
 
+**Note:** Do not host on heruko! The `canvas` module breaks if it's hosted on heruko. The board won't be displayed correctly!
+
 ## Bugs, Suggestions, Feedback
 
 If you want to report bugs, suggest new features or just give feedback about the bot, submit an issue [here](https://github.com/GoogleFeud/codenames-bot/issues) and give it the appropriate label.
