@@ -1,5 +1,5 @@
 
-
+const fetch = require("node-fetch");
 
 module.exports = class Util {
     
@@ -34,6 +34,23 @@ module.exports = class Util {
 
     static codeGen() {
         return '_' + Math.random().toString(36).substr(2, 5);
+    }
+
+    static DBL(token, handler, interval = 1800000) { // https://top.gg/api
+        fetch("https://top.gg/api/bots/stats", {method: "POST", hostname: "top.gg", headers: {
+            'content-type': "application/json",
+            'authorization': token,
+        }, body: JSON.stringify({
+            server_count: handler.guilds.cache.size
+        })});
+        setInterval(() => {
+            fetch("https://top.gg/api/bots/stats", {method: "POST", hostname: "top.gg", headers: {
+                'content-type': "application/json",
+                'authorization': token,
+            }, body: JSON.stringify({
+                server_count: handler.guilds.cache.size
+            })});
+        }, interval);
     }
     
 }
