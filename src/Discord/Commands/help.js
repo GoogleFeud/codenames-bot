@@ -14,9 +14,6 @@ Use \`-help [command]\` to get more information on a command.
 **1. Information -** \`help\`, \`game\`, \`tutorial\`, \`invite\`, \`gamemode\`
 **2. Game -**  \`clue\`, \`guess\`, \`endturn\`
 **3. Lobby -**  \`configure\`, \`join\`, \`leave\`, \`spymaster\`, \`start\`, \`stop\`, \`rng\`, \`givemaster\`
-
-Found a bug / have suggestions & feedback? Create an issue here: \`https://github.com/GoogleFeud/codenames-bot/issues/new\`
-Enjoying the bot? Upvote it: https://discordbots.org/bot/606487052992905247
 `)
     }else {
         const command = handler.findCommand(args[0]);

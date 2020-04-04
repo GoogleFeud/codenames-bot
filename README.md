@@ -1,6 +1,6 @@
 # codenames-bot
 
-**IMPORTANT** Bot no longer 24/7. You will have to run it yourself in order to play. 
+👏 Thank COVID-19 for making me update this bot. It's now compatible with the latest version of discord.js 👏
 
  ![owner](https://discordbots.org/api/widget/owner/606487052992905247.svg)
 
@@ -18,7 +18,6 @@ Do `-tutorial` to see the tutorial. There everything is explained in detail.
 | Command       | Description   | Permissions  |
 | ------------- | ------------- |------------- |
 | help          | Get help!     | N/A          |
-| invite        | Get the bot's invite link!   | N/A |
 | game          | Check the game in this channel  | N/A |
 | tutorial          | Check out the tutorial     | N/A  |
 | gamemodes       | See all gamemodes  | N/A |
@@ -33,6 +32,10 @@ Do `-tutorial` to see the tutorial. There everything is explained in detail.
 | guess          | Guess words  | `requiresGame`, `requiresTurn` |
 | endturn      | End your turn | `requiresGame`, `requiresTurn` |
 | givemaster      | Give another player game master.  | `requiresGame`, `requiresGameMaster` |
+
+## Self-Hosting
+
+If you want to self-host the bot, clone or fork this repository. Then, do `npm i` in the folder where `package.json` is. **You must have node.js version ^12.0.0 installed.**
 
 ## Bugs, Suggestions, Feedback
 

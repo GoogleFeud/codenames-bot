@@ -9,9 +9,5 @@ module.exports = {
         message.channel.game.removePlayer(message.author.id);
         message.author.team = null;
        if (!doNotsend) message.channel.send(`**✔ | Successfully removed you from the game!**`);
-      /**   if (message.channel.game.master.id == message.author.id && message.channel.game.players.size >= 1) {
-            message.channel.game.master = message.channel.game.players.random();
-            message.channel.send(`** ${message.channel.game.master.username} is now the game master! **`);
-        } **/
     }
 }

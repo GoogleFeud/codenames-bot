@@ -7,7 +7,7 @@ class Handler extends Discord.Client {
         super();
         this.prefix = "-",
         this.commands = new Discord.Collection();
-        this.owner = "356819274691510293";
+        this.owner = process.env.OWNER;
         this.login(process.env.TOKEN);
         let cmds = fs.readdirSync("./src/Discord/Commands").filter(cmd => cmd.endsWith("js"));
         for (let command of cmds) {
