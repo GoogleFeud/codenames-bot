@@ -2,8 +2,8 @@
 const Game = require("../Game.js");
 
 class TwoPlayerGame extends Game {
-    constructor(channel, id) {
-    super(channel, id);
+    constructor(channel, id, handler) {
+    super(channel, id, handler);
     this.addTeam("blue", {emoji: "🔵"});
     }
 
@@ -24,7 +24,7 @@ class TwoPlayerGame extends Game {
     start() {
         if (!this.turn) return;
         this.started = true;
-        this.channel.send(`**${this.turn.emoji} | \`${this.turn}\` (${this.turn.players.map(p => p.username)}), it's your turn!**`);
+        this.channel.send(`**${this.turn.emoji} | \`${this.turn}\` (${this.turn.players.map(p => p.user.username).join(", ")}), it's your turn!**`);
         this.displayBoard();
         this.displayMasterBoard();
         this.lastAction = Date.now();
@@ -35,14 +35,14 @@ class TwoPlayerGame extends Game {
                     this.masterBoard.sendAsMessage(this.channel, winner);
                     return this.stop();
                 }
-                 this.masterBoard.sendAsMessage(this.channel, `**${winner.emoji} | \`${winner.name}\` (${winner.players.map(p => p.username)}) wins!**`);
+                 this.masterBoard.sendAsMessage(this.channel, `**${winner.emoji} | \`${winner.name}\` (${winner.players.map(p => p.user.username).join(", ")}) wins!**`);
                  this.stop();
             }else if (this.turn.guesses === 0) {
                    this.turn.canEnd = false;
                    this.turn.guesses = false;
                    this.clue = null;
                    this.turn = this.teams.blue;
-                   this.channel.send(`**${this.turn.emoji} | \`${this.turn}\` (${this.turn.players.map(p => p.username)}), it's your turn!**`);
+                   this.channel.send(`**${this.turn.emoji} | \`${this.turn}\` (${this.turn.players.map(p => p.user.username).join(", ")}), it's your turn!**`);
                    this.displayBoard();
                    this.displayMasterBoard();
                }

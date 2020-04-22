@@ -1,4 +1,3 @@
-const {Collection} = require("discord.js");
 
 
 class Team {
@@ -7,11 +6,14 @@ class Team {
         this.game = options.game;
         this.spymaster = options.spymaster;
         this.wordsLeft = options.wordsLeft || 0;
-        this.players = options.players || new Collection();
         this.words = options.words;
         this.emoji = options.emoji;
         this.canEnd = false;
         this.guesses = false;
+    }
+
+    get players() {
+        return this.game.players.filter(p => p.team.name === this.name)
     }
 
     setSpymaster(user) {
@@ -51,7 +53,7 @@ class Team {
     }
 
     display() {
-        return this.players.map(p => `${p} ${(this.spymaster) ? (p.id == this.spymaster.id) ? "🕵🏻":"":""}`).join("\n") || "No players!"
+        return this.players.map(p => `${p.user.username} ${(this.spymaster) ? (p.user.id == this.spymaster.user.id) ? "🕵🏻":"":""}`).join("\n") || "No players!"
     }
 
     other() {

@@ -9,15 +9,11 @@ class Words extends Array {
 
     random(amount = 1, willDelete = false) {
         amount = Math.min(this.length, amount);
-         let res = new Words();
-         while (res.length != amount) {
-             let rng = Util.rngArr(this);
-             if (!res.includes(rng)) {
-                res.push(rng);
-                if (willDelete) this.splice(this.indexOf(rng), 1);
-             }
-         }
-         return res;
+        if (willDelete) return Words.from({ length: amount }, () => this.splice(Math.floor(Math.random() * this.length), 1)[0]);
+        else {
+        const arr = this.slice();
+		return Words.from({ length: amount }, () => arr.splice(Math.floor(Math.random() * arr.length), 1)[0]);
+        }
     }
 
     fromWhich(num, type) {

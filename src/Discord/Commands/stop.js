@@ -5,8 +5,9 @@ module.exports = {
     aliases: ["end"],
     requiresGame: true,
     requiresGameMaster: true,
-    exe(message, args, handler) {
-       message.channel.game.stop();
+    exe(message, args, handler, game) {
+       game.stop();
+       handler.games.delete(message.channel.id);
        message.channel.send("**✔ | Game stopped!**");
     }
 }

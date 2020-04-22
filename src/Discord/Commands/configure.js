@@ -10,8 +10,9 @@ const gamemodes = {
 module.exports = {
     name: "configure",
     description: "Configure a game on this channel!",
-    exe(message, args, handler) {
-        if (message.channel.game) return message.channel.send("✖ | **A game has already been configured on this channel! Do `-game` to check it out!**");
+    usage: "-configure [Gamemode?] [...Words?]\n-configure\n-configure 1Team\n-configure Word1 Word2 Word3...\n-configure 1Team Word1 Word2 Word3...",
+    exe(message, args, handler, game) {
+        if (game) return message.channel.send("✖ | **A game has already been configured on this channel! Do `-game` to check it out!**");
         let [gamemode, ...words] = args;
         if (!gamemodes[gamemode]) {words = args; gamemode = "2Team"}
        if (words && words.length) {
@@ -20,20 +21,21 @@ module.exports = {
         if (words.some(w => w.length > 16)) return message.channel.send("**✖ | One of the custom words is too long! Maximum length is `16`!**");
        }
        const id = Util.codeGen();
-       message.channel.game = new gamemodes[gamemode](message.channel, id);
-       message.channel.game.master = message.author;
-       message.channel.game.configure(words);
-       message.channel.game.displayBoard();
+       game = new gamemodes[gamemode](message.channel, id, handler);
+       game.master = message.author;
+       game.configure(words);
+       game.displayBoard();
+       handler.games.set(message.channel.id, game);
        message.channel.send("**🔌 | Note: The lobby will automatically be disbanded if there is no activity.**")
        let lastSize = 0;
        const interval = setInterval(() => {
-             if (message.channel.game && message.channel.game.id === id && !message.channel.game.started) {
-               if (lastSize === message.channel.game.players.size || message.channel.game.players.size === 0) {
-                   message.channel.game.stop();
+             if (game && game.id === id && !game.started) {
+               if (lastSize === game.players.size || game.players.size === 0) {
+                   game.stop();
                    clearInterval(interval);
                    return message.channel.send("** 📤 | Game disbanded. **");
                }
-               lastSize = message.channel.game.players.size;
+               lastSize = game.players.size;
              }else clearInterval(interval);
        }, 240000);
     }

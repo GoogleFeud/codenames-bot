@@ -3,11 +3,12 @@ const Word = require("./Word.js");
 const Team = require("./Team.js");
 const Words = require("../Util/Words.js");
 const Canvas = require("../Util/Canvas.js");
-
+const Player = require("./Player.js");
 
 class Game {
-    constructor(channel, id) {
+    constructor(channel, id, handler) {
     this.channel = channel;
+    this.handler = handler;
     this.board = new Canvas();
     this.id = id;
     this.masterBoard = new Canvas();
@@ -25,15 +26,13 @@ class Game {
     }
 
     addPlayer(user, team) {
-         this.players.set(user.id, user);
-         user.team = this.teams[team];
-         this.teams[team].players.set(user.id, user);
+         const pl = new Player(user, this.teams[team]);
+         this.players.set(user.id, pl);
+         return pl;
     }
 
     removePlayer(id) {
-        const p = this.players.get(id);
         this.players.delete(id);
-        p.team.players.delete(id);
     }
 
     addTeam(name, data) {
@@ -59,19 +58,15 @@ class Game {
 
 
     stop() {
-        this.started = false;
-         for (let [, player] of this.players) {
-             player.team = null;
-         }
         clearInterval(this.timer);
-        this.channel.game = null;
+        this.handler.games.delete(this.channel.id);
     }
 
     displayMasterBoard() {
          for (let word of this.words) {
              word.update(this.masterBoard, true);
          }
-         this.masterBoard.sendAsMessage(this.turn.spymaster, `**${this.turn.emoji} | Your team: ${this.turn}**`)
+         this.masterBoard.sendAsMessage(this.turn.spymaster.user, `**${this.turn.emoji} | Your team: ${this.turn}**`)
     }
 
 }
