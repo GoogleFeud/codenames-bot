@@ -1,5 +1,4 @@
 const fs = require('fs');
-const Util = require("./Util.js");
 const Word = require("../Codenames/Word.js");
 
 class Words extends Array {
@@ -73,9 +72,7 @@ class Wordlist extends Words {
   
   }
 
-  const wordlist = new Wordlist();
-
 module.exports = {
     Words: Words,
-    Wordlist: wordlist
+    Wordlist: new Wordlist()
 }

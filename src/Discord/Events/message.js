@@ -2,6 +2,7 @@
 
 module.exports = async (handler, message) => {
     if (message.channel.type == 'dm' || message.author.bot) return;
+    if (!message.guild.me.hasPermission("SEND_MESSAGES")) return;
     if (!message.content.startsWith(handler.prefix)) return;
 
     const args = message.content.slice(handler.prefix.length).replace(/\s+/g, " ").trim().split(/ +/);

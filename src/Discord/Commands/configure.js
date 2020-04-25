@@ -20,23 +20,11 @@ module.exports = {
         if (words.length > 25) return message.channel.send("**✖ | The maximum amount of custom words is `25`!**")
         if (words.some(w => w.length > 16)) return message.channel.send("**✖ | One of the custom words is too long! Maximum length is `16`!**");
        }
-       const id = Util.codeGen();
-       game = new gamemodes[gamemode](message.channel, id, handler);
+       game = new gamemodes[gamemode](message.channel, Util.codeGen(), handler);
        game.master = message.author;
        game.configure(words);
        game.displayBoard();
        handler.games.set(message.channel.id, game);
        message.channel.send("**🔌 | Note: The lobby will automatically be disbanded if there is no activity.**")
-       let lastSize = 0;
-       const interval = setInterval(() => {
-             if (game && game.id === id && !game.started) {
-               if (lastSize === game.players.size || game.players.size === 0) {
-                   game.stop();
-                   clearInterval(interval);
-                   return message.channel.send("** 📤 | Game disbanded. **");
-               }
-               lastSize = game.players.size;
-             }else clearInterval(interval);
-       }, 240000);
     }
 }

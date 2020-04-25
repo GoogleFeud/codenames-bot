@@ -51,7 +51,7 @@ class Game {
     configure(customWords) {
         this.board.drawBoard();
         this.masterBoard.drawBoard();
-        const words = Words.Wordlist.random(25, true);
+        const words = Words.Wordlist.random(25);
         if (customWords.length) words.replace(customWords.length, customWords.map(w => w.toLowerCase()));
         return words;
     }

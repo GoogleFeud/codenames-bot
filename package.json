@@ -4,10 +4,13 @@
   "description": "A discord bot for playing codenames",
   "main": "index.js",
   "dependencies": {
+    "bufferutil": "^4.0.1",
     "canvas": "^2.6.1",
     "discord.js": "^12.1.1",
     "dotenv": "^8.0.0",
-    "levitate.djs": "^0.1.6"
+    "erlpack": "github:discordapp/erlpack",
+    "levitate.djs": "^0.1.6",
+    "zlib-sync": "^0.1.6"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
