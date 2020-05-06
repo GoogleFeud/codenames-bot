@@ -6,7 +6,7 @@ module.exports = {
     permissions: Util.addBits(Util.permissions.requiresGame, Util.permissions.requiresGameMaster),
     exe(message, args, handler, game) {
        if (game.started) return;
-       //if (game.teamHasOneMember()) return message.channel.send("**✖ | At least 2 players in every team are required!**");
+       if (game.teamHasOneMember()) return message.channel.send("**✖ | At least 2 players in every team are required!**");
        if (!game.teamsHaveSpymasters()) return message.channel.send("**✖ | All teams must have a spymaster assigned!**");
        game.start();
        const interval = setInterval(() => {

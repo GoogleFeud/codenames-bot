@@ -23,7 +23,7 @@ module.exports = {
     exe(message, args, handler, game, player) {
         if (!game.started) return;
         if (player.team.guesses === false) return message.channel.send("**✖ | The spymaster hasn't given the clue!**");
-       // if (player.team.spymaster.user.id == message.author.id) return message.channel.send("**✖ | The spymaster cannot use this command!**");
+        if (player.team.spymaster.user.id == message.author.id) return message.channel.send("**✖ | The spymaster cannot use this command!**");
         if (!args.length) return message.channel.send("**✖ | You need to provide at least 1 word!**");
        if (args[0].includes(" | ")) args = args[0].split(" | ");
         if (!args.length) return message.channel.send("**✖ | You need to provide at least 1 word!**");
