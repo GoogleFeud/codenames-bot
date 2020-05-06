@@ -1,4 +1,5 @@
 const {MessageEmbed} = require("discord.js");
+const Util = require("../../Util/Util.js");
 
 module.exports = {
     name: "help",
@@ -29,11 +30,13 @@ Use \`-help [command]\` to get more information on a command.
         embed.setDescription(command.description);
         if (command.usage) embed.addField("Usage", command.usage);
         if (command.aliases) embed.addField("Aliases", command.aliases);
-        if (command.requiresGame) restrictions += '- A game needs to be configured on this channel\n';
-        if (command.requiresTurn) restrictions += '- It must be your team\'s turn\n';
-        if (command.requiresSpymaster) restrictions += '- You must be the spymaster\n'
-        if (command.requiresGameMaster) restrictions += '- You must be the game master\n'
-        if (restrictions != '') embed.addField("Restrictions", restrictions);
+        if (command.permissions) {
+            if (Util.perm(command.permissions, Util.permissions.requiresGame)) restrictions += '- A game needs to be configured on this channel\n';
+            if (Util.perm(command.permissions, Util.permissions.requiresTurn))  restrictions += '- It must be your team\'s turn\n';
+            if (Util.perm(command.permissions, Util.permissions.requiresSpymaster))  restrictions += '- You must be the spymaster\n'
+            if (Util.perm(command.permissions, Util.permissions.requiresGameMaster))  restrictions += '- You must be the game master\n'
+            embed.addField("Restrictions", restrictions);
+        }
         message.channel.send(embed);
     }
 }
