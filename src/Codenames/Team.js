@@ -31,7 +31,7 @@ class Team {
     }
 
     guess(word) {
-         word = this.game.words.find(w => w.word == word);
+        word = this.game.words.find(w => w.word == word);
         if (!word) return 0;
         if (word.guessedBy) return 1;
         word.guessedBy = this;

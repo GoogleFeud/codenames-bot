@@ -19,6 +19,6 @@ module.exports = {
         }
         team.setSpymaster(team.players.random());
      }
-     handler.commands.get("game").exe(message, args, handler, game);
+     handler.commands.get("game").exe(message, args, handler, game, false);
 }
 }

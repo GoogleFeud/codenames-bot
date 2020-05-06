@@ -8,6 +8,12 @@ module.exports = {
     exe(message, args, handler, game, player) {
         if (!game.started) return;
         if (!player.team.canEnd) return message.channel.send("**✖ | You must make at least 1 guess!**");
-        player.team.guesses = 0;
+        game.turn.canEnd = false;
+        game.turn.guesses = false;
+        game.clue = null;
+        game.turn = game.other(player.team);
+        message.channel.send(`**${game.turn.emoji} | \`${game.turn}\` (${game.turn.players.map(p => p.user.username).join(", ")}), it's your turn!**`);
+        game.displayBoard();
+        return game.displayMasterBoard();
     }
 }

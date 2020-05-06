@@ -2,8 +2,8 @@ const Util = require("../../Util/Util.js");
 const Game = require("../Game.js");
 
 class TwoTeamGame extends Game {
-    constructor(channel, id, handler) {
-    super(channel, id, handler);
+    constructor(channel, id) {
+    super(channel, id);
     this.addTeam("red", {emoji: "🔴"});
     this.addTeam("blue", {emoji: "🔵"});
     }
@@ -27,32 +27,7 @@ class TwoTeamGame extends Game {
         this.channel.send(`**${this.turn.emoji} | \`${this.turn}\` (${this.turn.players.map(p => p.user.username).join(", ")}), it's your turn!**`);
         this.displayBoard();
         this.displayMasterBoardFirst();
-        let counter = 1;
         this.lastAction = Date.now();
-        const turns = [this.turn];
-        (this.turn.name == 'red') ? turns.push(this.teams.blue):turns.push(this.teams.red);
-        this.timer = setInterval(() => {
-            const winner = this.isThereAWinner();
-            if (winner) {
-                this.updateMasterBoard();
-                this.masterBoard.sendAsMessage(this.channel, `**${winner.emoji} | \`${winner.name}\` (${winner.players.map(p => p.user.username).join(", ")}) wins!**`);
-                this.stop();
-            }else if (this.turn.guesses === 0) {
-                   this.turn.canEnd = false;
-                   this.turn.guesses = false;
-                   this.clue = null;
-                   this.turn = turns[counter];
-                   this.channel.send(`**${this.turn.emoji} | \`${this.turn}\` (${this.turn.players.map(p => p.user.username).join(", ")}), it's your turn!**`);
-                   this.displayBoard();
-                   this.displayMasterBoard();
-                   if (counter == turns.length - 1) counter = 0;
-                   else counter++;
-               }
-            else if ((Date.now() - this.lastAction) >= 1200000) {
-                this.stop();
-                this.channel.send("** 📤 | Game disbanded. **")
-            };
-        }, 1000);
     }
 
 
@@ -76,6 +51,11 @@ class TwoTeamGame extends Game {
         if (this.teams.red.spymaster && this.teams.blue.spymaster) return true;
         return false;
     }
+
+    other(current) {
+        if (current.name === "blue") return this.teams["red"];
+        else return this.teams["blue"];
+    } 
 
 
     displayBoard() {

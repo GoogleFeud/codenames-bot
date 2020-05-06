@@ -6,9 +6,8 @@ const Canvas = require("../Util/Canvas.js");
 const Player = require("./Player.js");
 
 class Game {
-    constructor(channel, id, handler) {
+    constructor(channel, id) {
     this.channel = channel;
-    this.handler = handler;
     this.board = new Canvas();
     this.id = id;
     this.masterBoard = new Canvas();
@@ -56,11 +55,6 @@ class Game {
         return words;
     }
 
-    stop() {
-        clearInterval(this.timer);
-        this.handler.games.delete(this.channel.id);
-    }
-
     updateMasterBoard() {
         for (let word of this.words) {
             word.update(this.masterBoard, true);
@@ -77,7 +71,7 @@ class Game {
             word.update(this.masterBoard, true);
         }
         for (let teamName in this.teams) {
-            this.masterBoard.sendAsMessage(this.teams[teamName].spymaster.user, `**${this.turn.emoji} | Your team: ${this.turn}**`)
+            this.masterBoard.sendAsMessage(this.teams[teamName].spymaster.user, `**${this.teams[teamName].emoji} | Your team: ${teamName}**`)
         }
     }
 

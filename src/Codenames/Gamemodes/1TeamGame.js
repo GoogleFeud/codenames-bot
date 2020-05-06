@@ -2,8 +2,8 @@
 const Game = require("../Game.js");
 
 class TwoPlayerGame extends Game {
-    constructor(channel, id, handler) {
-    super(channel, id, handler);
+    constructor(channel, id) {
+    super(channel, id);
     this.addTeam("blue", {emoji: "🔵"});
     }
 
@@ -24,30 +24,6 @@ class TwoPlayerGame extends Game {
         this.displayBoard();
         this.displayMasterBoard();
         this.lastAction = Date.now();
-        this.timer = setInterval(() => {
-            const winner = this.isThereAWinner();
-            if (winner) {
-                if (typeof winner === "string") {
-                    this.masterBoard.sendAsMessage(this.channel, winner);
-                    return this.stop();
-                }
-                this.updateMasterBoard();
-                 this.masterBoard.sendAsMessage(this.channel, `**${winner.emoji} | \`${winner.name}\` (${winner.players.map(p => p.user.username).join(", ")}) wins!**`);
-                 this.stop();
-            }else if (this.turn.guesses === 0) {
-                   this.turn.canEnd = false;
-                   this.turn.guesses = false;
-                   this.clue = null;
-                   this.turn = this.teams.blue;
-                   this.channel.send(`**${this.turn.emoji} | \`${this.turn}\` (${this.turn.players.map(p => p.user.username).join(", ")}), it's your turn!**`);
-                   this.displayBoard();
-                   this.displayMasterBoard();
-               }
-            else if ((Date.now() - this.lastAction) >= 1200000) {
-                this.stop();
-                this.channel.send("** 📤 | Game disbanded. **")
-            };
-        }, 1000);
     }
 
 
@@ -68,6 +44,10 @@ class TwoPlayerGame extends Game {
     teamsHaveSpymasters() {
         if (this.teams.blue.spymaster) return true;
         return false;
+    }
+
+    other() {
+        return this.teams["blue"];
     }
 
     displayBoard() {

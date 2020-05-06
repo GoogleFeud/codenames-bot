@@ -5,7 +5,7 @@ module.exports = {
     name: "game",
     description: "Check info about the current game!",
     permissions: Util.permissions.requiresGame,
-    exe(message, args, handler, game) {
+    exe(message, args, handler, game, withImg = true) {
           const embed = new MessageEmbed();
           embed.setAuthor(game.master.username, game.master.displayAvatarURL());
           embed.setColor("RANDOM");
@@ -15,7 +15,7 @@ module.exports = {
               embed.addField(team.name, team.display(), true);
           }
           if (game.clue) embed.addField("Clue:", `Clue for the ${game.turn.emoji} team: **${game.clue}**`);
-          embed.attachFiles([game.board.saveAsLink()]);
+          if (withImg) embed.attachFiles([game.board.saveAsLink()]);
           message.channel.send(embed);
     }
 }
