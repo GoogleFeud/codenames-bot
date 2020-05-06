@@ -1,12 +1,12 @@
+const Util = require("../../Util/Util.js");
 
 module.exports = {
     name: "clue",
     description: "Give out a clue!",
-    requiresGame: true,
-    requiresTurn: true,
-    requiresSpymaster: true,
+    permissions: Util.addBits(Util.permissions.requiresGame, Util.permissions.requiresTurn, Util.permissions.requiresSpymaster),
     usage: "-clue [word] [guesses]\n-clue something 3",
     exe(message, args, handler, game, player) {
+       if (!game.started) return;
        if (game.clue) return message.channel.send("**✖ | You already gave a clue to your team!**")
        let [word, number] = args;
        if (isNaN(number)) return message.channel.send("**✖ | You need to provide the amount of guesses your team will have!**");

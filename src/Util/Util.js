@@ -52,5 +52,22 @@ module.exports = class Util {
             })}).catch(err => {});
         }, interval);
     }
+
+    static permissions = {
+        requiresGame: 0b1000,
+        requiresTurn: 0b0100,
+        requiresSpymaster: 0b0010,
+        requiresGameMaster: 0b0001
+    }
+
+    static perm(commandPerm, requiredPerm) {
+        return commandPerm & requiredPerm;
+    }
+
+    static addBits(...bits) {
+        let tot = 0;
+        for (let bit of bits) tot |= bit;
+        return tot;
+    }
     
 }

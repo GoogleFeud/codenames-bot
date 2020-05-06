@@ -16,13 +16,8 @@ class TwoTeamGame extends Game {
        const blue = words.fromWhich((redNum == 9) ? 8:9, "blue");
        const ass = words.fromWhich(1, "assassin");
        const neut = words.fromWhich(7, "neutral");
-       this.teams.red.setWords(red);
-       this.teams.blue.setWords(blue);
-       this.words.push(...[...ass, ...neut, ...red, ...blue]);
+       this.words.push(...ass, ...neut, ...red, ...blue);
        this.words.shuffle();
-       const toarr = this.words.map(w => w.word);
-       this.board.placeWords(toarr);
-       this.masterBoard.placeWords(toarr);
        this.turn = (red.length == 9) ? this.teams.red:this.teams.blue;
     }
 
@@ -31,7 +26,7 @@ class TwoTeamGame extends Game {
         this.started = true;
         this.channel.send(`**${this.turn.emoji} | \`${this.turn}\` (${this.turn.players.map(p => p.user.username).join(", ")}), it's your turn!**`);
         this.displayBoard();
-        this.displayMasterBoard();
+        this.displayMasterBoardFirst();
         let counter = 1;
         this.lastAction = Date.now();
         const turns = [this.turn];
@@ -39,6 +34,7 @@ class TwoTeamGame extends Game {
         this.timer = setInterval(() => {
             const winner = this.isThereAWinner();
             if (winner) {
+                this.updateMasterBoard();
                 this.masterBoard.sendAsMessage(this.channel, `**${winner.emoji} | \`${winner.name}\` (${winner.players.map(p => p.user.username).join(", ")}) wins!**`);
                 this.stop();
             }else if (this.turn.guesses === 0) {

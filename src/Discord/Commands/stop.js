@@ -1,10 +1,10 @@
+const Util = require("../../Util/Util.js");
 
 module.exports = {
     name: "stop",
     description: "Stop the game!",
     aliases: ["end"],
-    requiresGame: true,
-    requiresGameMaster: true,
+    permissions: Util.addBits(Util.permissions.requiresGame, Util.permissions.requiresGameMaster),
     exe(message, args, handler, game) {
        game.stop();
        handler.games.delete(message.channel.id);

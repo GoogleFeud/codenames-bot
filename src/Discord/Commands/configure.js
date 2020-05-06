@@ -11,8 +11,8 @@ module.exports = {
     name: "configure",
     description: "Configure a game on this channel!",
     usage: "-configure [Gamemode?] [...Words?]\n-configure\n-configure 1Team\n-configure Word1 Word2 Word3...\n-configure 1Team Word1 Word2 Word3...",
-    exe(message, args, handler, game) {
-        if (game) return message.channel.send("✖ | **A game has already been configured on this channel! Do `-game` to check it out!**");
+    exe(message, args, handler) {
+        if (handler.games.has(message.channel.id)) return message.channel.send("✖ | **A game has already been configured on this channel! Do `-game` to check it out!**");
         let [gamemode, ...words] = args;
         if (!gamemodes[gamemode]) {words = args; gamemode = "2Team"}
        if (words && words.length) {

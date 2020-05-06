@@ -1,8 +1,9 @@
+const Util = require("../../Util/Util.js");
 
 module.exports = {
     name: "spymaster",
     description: "Become the spymaster!",
-    requiresGame: true,
+    permissions: Util.permissions.requiresSpymaster,
     exe(message, args, handler, game, player) {
         if (game.started) return message.channel.send("**✖ | The game has already started!**");
         if (!player) return message.channel.send("**✖ | You must be in a team!**")

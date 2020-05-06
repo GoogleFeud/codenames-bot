@@ -49,24 +49,36 @@ class Game {
     }
 
     configure(customWords) {
-        this.board.drawBoard();
-        this.masterBoard.drawBoard();
         const words = Words.Wordlist.random(25);
         if (customWords.length) words.replace(customWords.length, customWords.map(w => w.toLowerCase()));
+        this.board.drawBoard(words);
+        this.masterBoard.drawBoard(words);
         return words;
     }
-
 
     stop() {
         clearInterval(this.timer);
         this.handler.games.delete(this.channel.id);
     }
 
+    updateMasterBoard() {
+        for (let word of this.words) {
+            word.update(this.masterBoard, true);
+        }
+    }
+
     displayMasterBoard() {
-         for (let word of this.words) {
-             word.update(this.masterBoard, true);
-         }
+         this.updateMasterBoard();
          this.masterBoard.sendAsMessage(this.turn.spymaster.user, `**${this.turn.emoji} | Your team: ${this.turn}**`)
+    }
+
+    displayMasterBoardFirst() {
+        for (let word of this.words) {
+            word.update(this.masterBoard, true);
+        }
+        for (let teamName in this.teams) {
+            this.masterBoard.sendAsMessage(this.teams[teamName].spymaster.user, `**${this.turn.emoji} | Your team: ${this.turn}**`)
+        }
     }
 
 }

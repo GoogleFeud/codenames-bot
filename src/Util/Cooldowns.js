@@ -12,7 +12,6 @@ class Cooldowns {
         else this.obj[user.id]++;
         if (this.obj[user.id] >= this.max) return true;
         setTimeout(() => {
-            delete user.muted;
             delete this.obj[user.id];
             delete this.muted[user.id];
         }, expiresIn);

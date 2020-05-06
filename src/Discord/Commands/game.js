@@ -1,9 +1,10 @@
 const {MessageEmbed} = require("discord.js");
+const Util = require("../../Util/Util.js");
 
 module.exports = {
     name: "game",
     description: "Check info about the current game!",
-    requiresGame: true,
+    permissions: Util.permissions.requiresGame,
     exe(message, args, handler, game) {
           const embed = new MessageEmbed();
           embed.setAuthor(game.master.username, game.master.displayAvatarURL());

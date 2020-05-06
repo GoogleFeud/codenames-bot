@@ -12,12 +12,8 @@ class TwoPlayerGame extends Game {
        const words = super.configure(customWords);
        const blue = words.fromWhich(10, "blue");
        const ass = words.fromWhich(15, "assassin");
-       this.teams.blue.setWords(blue);
-       this.words.push(...[...ass, ...blue]);
+       this.words.push(...ass, ...blue);
        this.words.shuffle();
-       const toarr = this.words.map(w => w.word);
-       this.board.placeWords(toarr);
-       this.masterBoard.placeWords(toarr);
        this.turn = this.teams.blue;
     }
 
@@ -35,6 +31,7 @@ class TwoPlayerGame extends Game {
                     this.masterBoard.sendAsMessage(this.channel, winner);
                     return this.stop();
                 }
+                this.updateMasterBoard();
                  this.masterBoard.sendAsMessage(this.channel, `**${winner.emoji} | \`${winner.name}\` (${winner.players.map(p => p.user.username).join(", ")}) wins!**`);
                  this.stop();
             }else if (this.turn.guesses === 0) {

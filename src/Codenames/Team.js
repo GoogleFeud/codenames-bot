@@ -5,8 +5,6 @@ class Team {
         this.name = name;
         this.game = options.game;
         this.spymaster = options.spymaster;
-        this.wordsLeft = options.wordsLeft || 0;
-        this.words = options.words;
         this.emoji = options.emoji;
         this.canEnd = false;
         this.guesses = false;
@@ -16,17 +14,20 @@ class Team {
         return this.game.players.filter(p => p.team.name === this.name)
     }
 
+    get words() {
+        return this.game.words.filter(w => w.type === this.name);
+    }
+
+    get wordsLeft() {
+        return this.game.words.filter(w => w.type === this.name && !w.guessedBy).length;
+    }
+
     setSpymaster(user) {
         this.spymaster = user;
     }
 
     addPlayer(user) {
         this.players.push(user);
-    }
-
-    setWords(words) {
-        this.words = words;
-        this.wordsLeft = words.length;
     }
 
     guess(word) {
@@ -38,14 +39,7 @@ class Team {
         this.game.lastAction = Date.now();
         if (!this.canEnd) this.canEnd = true;
         word.update(this.game.board, false);
-        if (word.type != this.name) {
-            if (this.game.teams[word.type]) this.game.teams[word.type].wordsLeft--;
-            return false;
-        }
-        else {
-            this.wordsLeft--;
-            return true;
-        }
+        return word.type === this.name;
     }
 
     toString() {

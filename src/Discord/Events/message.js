@@ -1,4 +1,5 @@
 
+const Util = require("../../Util/Util.js");
 
 module.exports = async (handler, message) => {
     if (message.channel.type == 'dm' || message.author.bot) return;
@@ -19,17 +20,19 @@ module.exports = async (handler, message) => {
         return;
     }
 
-    if (command.botOwnerOnly && message.author.id != handler.owner) return message.channel.send("✖ | **Only my owner can use this command!**");
-
-    const game = handler.games.get(message.channel.id);
-    if (command.requiresGame && !game) return message.channel.send("✖ | **This channel must have a game configured in order to use this command!**");
-
-    const player = game ? game.players.get(message.author.id):undefined;
-    if (command.requiresTurn && game.turn && player && player.team.name != game.turn) return message.channel.send("✖ | **You can use this command when it's your turn!**")
-
-    if (command.requiresSpymaster && game.turn && game.turn.spymaster.user.id != message.author.id) return message.channel.send("✖ | **You must be your team's spymaster in order to use this command!**");
-
-    if (command.requiresGameMaster && game.master.id != message.author.id) return message.channel.send("✖ | **You must be the game master in order to use this command!**");
+    let game;
+    let player;
+    if (command.permissions) {
+        game = handler.games.get(message.channel.id);
+        if (Util.perm(command.permissions, Util.permissions.requiresGame) && !game) return message.channel.send("✖ | **This channel must have a game configured in order to use this command!**");
+    
+        player = game ? game.players.get(message.author.id):undefined;
+        if (Util.perm(command.permissions, Util.permissions.requiresTurn) && game.turn && player && player.team.name != game.turn) return message.channel.send("✖ | **You can use this command when it's your turn!**")
+    
+        if (game && game.started && Util.perm(command.permissions, Util.permissions.requiresSpymaster) && game.turn && game.turn.spymaster.user.id != message.author.id) return message.channel.send("✖ | **You must be your team's spymaster in order to use this command!**");
+    
+        if (Util.perm(command.permissions, Util.permissions.requiresGameMaster) && game.master.id != message.author.id) return message.channel.send("✖ | **You must be the game master in order to use this command!**");
+    }
 
    try {
        command.exe(message, args, handler, game, player);

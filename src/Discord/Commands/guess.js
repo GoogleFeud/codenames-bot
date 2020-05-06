@@ -1,11 +1,12 @@
+const Util = require("../../Util/Util.js");
 
 module.exports = {
     name: "guess",
     description: "Guess a word!",
-    requiresGame: true,
-    requiresTurn: true,
+    permissions: Util.addBits(Util.permissions.requiresGame, Util.permissions.requiresTurn),
     usage: "-guess [words...]\n-guess plane\n-guess plane bird bomb",
     exe(message, args, handler, game, player) {
+        if (!game.started) return;
         if (player.team.guesses === false) return message.channel.send("**✖ | The spymaster hasn't given the clue!**");
         if (player.team.spymaster.user.id == message.author.id) return message.channel.send("**✖ | The spymaster cannot use this command!**");
         if (!args.length) return message.channel.send("**✖ | You need to provide at least 1 word!**");
@@ -15,7 +16,7 @@ module.exports = {
         let res = '';
         let sent = false;
         for (let wordA of args) {
-            let og = game.words.find(w => w.word == wordA.toLowerCase());
+            let og = game.words.find(w => w.word == wordA);
             if (player.team.guesses === 0) {
                 sent = true;
                 return message.channel.send(res);
