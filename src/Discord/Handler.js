@@ -1,35 +1,17 @@
-const Discord = require("discord.js"),
-LevitatingClient = require("levitate.djs"),
-Cooldowns = require("../Util/Cooldowns.js");
-fs = require("fs");
+const Discord = require("nakamura");
+const Cooldowns = require("../Util/Cooldowns.js");
+const fs = require("fs");
+const Collection = require("@discordjs/collection");
 
 
-class Handler extends LevitatingClient {
+class Handler extends Discord.Client {
     constructor() {
-        super({
-          channels: {
-                cache: false
-          },
-          users: {
-              cache: false,
-              ignoreBots: true
-          },
-          members: {
-             cache: false,
-          },
-          ignoreEmojis: true, 
-          ignorePresences: true,
-          ignoreReactions: true,
-          disabledEvents: ["CHANNEL_CREATE", "CHANNEL_PINS_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "GUILD_EMOJIS_UPDATE", "GUILD_INTEGRATIONS_UPDATE", "GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_MEMBER_UPDATE", "INVITE_CREATE", "INVITE_DELETE", "MESSAGE_REACTION_ADD", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "MESSAGE_REACTION_REMOVE_EMOJI", "MESSAGE_UPDATE", "PRESENCE_UPDATE", "TYPING_START", "USER_UPDATE", "VOICE_SERVER_UPDATE", "VOICE_STATE_UPDATE"]
-        }, {
-            messageCacheMaxSize: 0
-        });
+        super(process.env.TOKEN);
         this.prefix = "-",
-        this.commands = new Discord.Collection();
+        this.commands = new Collection();
         this.cooldowns = new Cooldowns(4);
-        this.games = new Discord.Collection();
+        this.games = new Collection();
         this.owner = process.env.OWNER;
-        this.login(process.env.TOKEN);
         let cmds = fs.readdirSync("./src/Discord/Commands").filter(cmd => cmd.endsWith("js"));
         for (let command of cmds) {
             const cmdobj = require(`./Commands/${command}`);
@@ -38,12 +20,20 @@ class Handler extends LevitatingClient {
         let events = fs.readdirSync("./src/Discord/Events").filter(cmd => cmd.endsWith("js"));
         for (let event of events) {
             const evntobj = require(`./Events/${event}`);
-            this.on(event.replace(".js", ""), evntobj.bind(null, this));
+            this.events.on(event.replace(".js", ""), evntobj.bind(null, this));
         }
     }
 
      findCommand(name) {
         return this.commands.get(name) || this.commands.find(cmd => cmd.aliases && cmd.aliases.some(p => p == name));
+    }
+
+    sendToChannel(channelId, content) {
+       try {
+           return super.sendToChannel(channelId, content);
+       }catch(err) {
+           return false;
+       }
     }
 
 }

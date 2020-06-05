@@ -4,12 +4,11 @@
   "description": "A discord bot for playing codenames",
   "main": "index.js",
   "dependencies": {
-    "bufferutil": "^4.0.1",
-    "discord.js": "^12.1.1",
+    "@discordjs/collection": "^0.1.5",
     "canvas": "^2.6.1",
     "dotenv": "^8.0.0",
     "erlpack": "github:discordapp/erlpack",
-    "levitate.djs": "^0.1.6",
+    "nakamura": "github:GoogleFeud/Nakamura",
     "zlib-sync": "^0.1.6"
   },
   "scripts": {

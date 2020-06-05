@@ -3,7 +3,7 @@ const Util = require("../../Util/Util.js");
 function handleWinner(game, res, handler, message) {
     const winner = game.isThereAWinner();
     if (typeof winner === "string") {
-        game.masterBoard.sendAsMessage(game.channel, winner);
+        game.masterBoard.sendAsMessage(game.channel, `${res}\n${winner}`);
         handler.games.delete(message.channel.id);
         return true;
     }
