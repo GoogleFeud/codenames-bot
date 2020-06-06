@@ -1,12 +1,16 @@
 # codenames-bot
 
-👏 Thank COVID-19 for making me update this bot. It's now compatible with the latest version of discord.js 👏
-
  ![owner](https://discordbots.org/api/widget/owner/606487052992905247.svg)
 
 A fully automated discord bot for playing the award-winning party game [codenames](https://en.wikipedia.org/wiki/Codenames_(board_game)).
 
 ![show](https://i.imgur.com/K9qx1nW.gif)
+
+## Nakamura Version
+
+This version of the bot uses [Nakamura](https://github.com/GoogleFeud/Nakamura), a library for working with the discord API without any caching and state managing. The transition from discord.js to nakamura went really smoothly, took me a hour to change everything.
+
+The only problem is with permissions, as it's a little hard to track them, so the bot doesn't check if it can send messages, it sends them and if they fail, they fail silently.
 
 ## How To Use / Commands
 

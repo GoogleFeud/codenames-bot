@@ -2,9 +2,15 @@
 const Util = require("../../Util/Util.js");
 
 module.exports = async (handler, message) => {
-    if (message.channel.type == 1 || message.author.bot) return; // If DM channel / bot, ignore
+    if (!message.guild_id || message.author.bot || !message.author) return; // If DM channel / bot, ignore
     //if (!message.guild.me.hasPermission("SEND_MESSAGES")) return; - This one is yikes
     if (!message.content.startsWith(handler.prefix)) return;
+
+    /**try {
+      await handler._dummySend(message.channel_id);
+    }catch(err) {
+        return;
+    } **/
 
     const args = message.content.slice(handler.prefix.length).replace(/\s+/g, " ").trim().split(/ +/);
     const cmdName = args.shift().toLowerCase();
@@ -15,7 +21,7 @@ module.exports = async (handler, message) => {
     if (handler.cooldowns.register(message.author, 8000)) {
         if (!handler.cooldowns.isMuted(message.author.id)) {
             handler.cooldowns.mute(message.author.id);
-            handler.sendToChannel(message.channel_id, `> 🥶 ${message.author}, please wait a few seconds before using another command!`);
+            handler.sendToChannel(message.channel_id, `> 🥶 ${message.author.username}, please wait a few seconds before using another command!`);
          }
         return;
     }
@@ -23,7 +29,7 @@ module.exports = async (handler, message) => {
     let game;
     let player;
     if (command.permissions) {
-        game = handler.games.get(message.channel.id);
+        game = handler.games.get(message.channel_id);
         if (Util.perm(command.permissions, Util.permissions.requiresGame) && !game) return handler.sendToChannel(message.channel_id, "✖ | **This channel must have a game configured in order to use this command!**");
     
         player = game ? game.players.get(message.author.id):undefined;

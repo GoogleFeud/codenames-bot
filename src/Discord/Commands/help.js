@@ -1,4 +1,4 @@
-const {MessageEmbed} = require("discord.js");
+
 const Util = require("../../Util/Util.js");
 
 module.exports = {
@@ -6,7 +6,7 @@ module.exports = {
     description: "Get help!",
     exe(message, args, handler) {
         if (!args.length) {
-       message.channel.send(`
+       handler.sendToChannel(message.channel_id, `
 \`\`\`ml
 'Command' "List"\`\`\`
 
@@ -21,23 +21,24 @@ Use \`-help [command]\` to get more information on a command.
 `)
     }else {
         const command = handler.findCommand(args[0]);
-        if (!command) return message.channel.send("**✖ | This command doesn't exist!**");
+        if (!command) return "**✖ | This command doesn't exist!**";
         let restrictions = '';
-        const embed = new MessageEmbed();
-        embed.setAuthor(message.author.username, message.author.displayAvatarURL());
-        embed.setTitle(command.name);
-        embed.setColor("RANDOM");
-        embed.setDescription(command.description);
-        if (command.usage) embed.addField("Usage", command.usage);
-        if (command.aliases) embed.addField("Aliases", command.aliases);
+        const embed = {
+            author: {name: message.author.username, icon_url: handler.urlUserAvatar(message.author.id, message.author.avatar)},
+            title: command.name,
+            description: command.description,
+            fields: []
+        };
+        if (command.usage) embed.fields.push({name: "Usage", value: command.usage})
+        if (command.aliases) embed.fields.push({name: "Aliases", value: command.aliases})
         if (command.permissions) {
             if (Util.perm(command.permissions, Util.permissions.requiresGame)) restrictions += '- A game needs to be configured on this channel\n';
             if (Util.perm(command.permissions, Util.permissions.requiresTurn))  restrictions += '- It must be your team\'s turn\n';
             if (Util.perm(command.permissions, Util.permissions.requiresSpymaster))  restrictions += '- You must be the spymaster\n'
             if (Util.perm(command.permissions, Util.permissions.requiresGameMaster))  restrictions += '- You must be the game master\n'
-            embed.addField("Restrictions", restrictions);
+            embed.fields.push({name: "Restrictions", value: restrictions});
         }
-        message.channel.send(embed);
+        handler.sendToChannel(message.channel_id, embed);
     }
 }
 }

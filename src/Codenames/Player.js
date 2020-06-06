@@ -7,7 +7,7 @@ class Player {
     }
 
     toString() {
-        return this.user;
+        return `<@${this.user.id}`;
     }
     
 }

@@ -1,4 +1,4 @@
-const {User} = require("discord.js");
+
 const Util = require("../../Util/Util.js");
 
 module.exports = {
@@ -6,8 +6,8 @@ module.exports = {
     description: "Give the game master permission to someone else!",
     permissions: Util.addBits(Util.permissions.requiresGame, Util.permissions.requiresGameMaster),
     exe(message, args, handler, game) {
-        if (!message.mentions.users.length) return message.channel.send("**✖ | You must ping the user you want to give master to!**");
-        game.master = new User(handler, message.mentions.users[0]);
-        message.channel.send(`**✔ | \`${game.master.username}\` is now the game master!**`);
+        if (!message.mentions[0]) return "**✖ | You must ping the user you want to give master to!**";
+        game.master = message.mentions[0];
+        return `**✔ | \`${game.master.username}\` is now the game master!**`;
     }
 }

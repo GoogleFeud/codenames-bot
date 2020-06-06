@@ -1,6 +1,5 @@
 const canvas = require("canvas");
 const fs = require("fs");
-const {MessageAttachment} = require("discord.js");
 
 canvas.registerFont("./assets/myfont.otf", {family: "myfontNew-A"});
 
@@ -71,16 +70,24 @@ class Canvas {
         fs.writeFileSync(path, this.canvas.toBuffer());
     }
 
-    saveAsLink() {
-       const link = new MessageAttachment(this.canvas.toBuffer(), "board.png");
-       return link;
+    toBuffer() {
+        return this.canvas.toBuffer();
     }
 
-    sendAsMessage(channel, message) {
-        const attachment = new MessageAttachment(this.canvas.toBuffer(), "board.png");
-        if (!message) channel.send(attachment);
-        else channel.send(message, {files: [attachment] })
-        return attachment;
+    sendAsMessage(client, channelId, message, user) {
+        if (user) {
+            client.sendToUser(channelId, {
+                file: this.canvas.toBuffer(),
+                filename: "board.png",
+                content: message
+            });
+       }else {
+        client.sendToChannel(channelId, {
+            file: this.canvas.toBuffer(),
+            filename: "board.png",
+            content: message
+        });
+        }
     }
 
       sizeWord(word) {

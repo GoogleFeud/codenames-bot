@@ -8,7 +8,8 @@
     "canvas": "^2.6.1",
     "dotenv": "^8.0.0",
     "erlpack": "github:discordapp/erlpack",
-    "nakamura": "github:GoogleFeud/Nakamura",
+    "form-data": "^3.0.0",
+    "nakamura": "github:GoogleFeud/nakamura",
     "zlib-sync": "^0.1.6"
   },
   "scripts": {

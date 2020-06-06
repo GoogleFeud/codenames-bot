@@ -41,14 +41,14 @@ module.exports = class Util {
             'content-type': "application/json",
             'authorization': token,
         }, body: JSON.stringify({
-            server_count: handler.guilds.cache.size
+            server_count: handler.guilds
         })}).catch(err => {});
         setInterval(() => {
             fetch("https://top.gg/api/bots/stats", {method: "POST", hostname: "top.gg", headers: {
                 'content-type': "application/json",
                 'authorization': token,
             }, body: JSON.stringify({
-                server_count: handler.guilds.cache.size
+                server_count: handler.guilds
             })}).catch(err => {});
         }, interval);
     }

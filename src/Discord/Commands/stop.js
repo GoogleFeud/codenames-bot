@@ -6,7 +6,7 @@ module.exports = {
     aliases: ["end"],
     permissions: Util.addBits(Util.permissions.requiresGame, Util.permissions.requiresGameMaster),
     exe(message, args, handler, game) {
-       handler.games.delete(message.channel.id);
-       message.channel.send("**✔ | Game stopped!**");
+       handler.games.delete(message.channel_id);
+       return "**✔ | Game stopped!**";
     }
 }

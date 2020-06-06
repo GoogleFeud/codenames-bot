@@ -24,7 +24,7 @@ class TwoTeamGame extends Game {
     start() {
         if (!this.turn) return;
         this.started = true;
-        this.channel.send(`**${this.turn.emoji} | \`${this.turn}\` (${this.turn.players.map(p => p.user.username).join(", ")}), it's your turn!**`);
+        this.handler.sendToChannel(this.channel, `**${this.turn.emoji} | \`${this.turn}\` (${this.turn.players.map(p => p.user.username).join(", ")}), it's your turn!**`);
         this.displayBoard();
         this.displayMasterBoardFirst();
         this.lastAction = Date.now();
@@ -59,7 +59,7 @@ class TwoTeamGame extends Game {
 
 
     displayBoard() {
-       this.board.sendAsMessage(this.channel, `🔴 ${this.teams.red.wordsLeft} | 🔵 ${this.teams.blue.wordsLeft}`);
+       this.board.sendAsMessage(this.handler, this.channel, `🔴 ${this.teams.red.wordsLeft} | 🔵 ${this.teams.blue.wordsLeft}`);
     }
 
 

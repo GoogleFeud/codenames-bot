@@ -1,4 +1,4 @@
-const {Collection} = require("discord.js");
+const Collection = require("@discordjs/collection");
 const Word = require("./Word.js");
 const Team = require("./Team.js");
 const Words = require("../Util/Words.js");
@@ -6,7 +6,8 @@ const Canvas = require("../Util/Canvas.js");
 const Player = require("./Player.js");
 
 class Game {
-    constructor(channel, id) {
+    constructor(handler, channel, id) {
+    this.handler = handler;
     this.channel = channel;
     this.board = new Canvas();
     this.id = id;
@@ -63,7 +64,7 @@ class Game {
 
     displayMasterBoard() {
          this.updateMasterBoard();
-         this.masterBoard.sendAsMessage(this.turn.spymaster.user, `**${this.turn.emoji} | Your team: ${this.turn}**`)
+         this.masterBoard.sendAsMessage(this.handler, this.turn.spymaster.user.id, `**${this.turn.emoji} | Your team: ${this.turn}**`, true)
     }
 
     displayMasterBoardFirst() {
@@ -71,7 +72,7 @@ class Game {
             word.update(this.masterBoard, true);
         }
         for (let teamName in this.teams) {
-            this.masterBoard.sendAsMessage(this.teams[teamName].spymaster.user, `**${this.teams[teamName].emoji} | Your team: ${teamName}**`)
+            this.masterBoard.sendAsMessage(this.handler, this.teams[teamName].spymaster.user.id, `**${this.teams[teamName].emoji} | Your team: ${teamName}**`, true)
         }
     }
 

@@ -12,6 +12,7 @@ class Handler extends Discord.Client {
         this.cooldowns = new Cooldowns(4);
         this.games = new Collection();
         this.owner = process.env.OWNER;
+        this.connect();
         let cmds = fs.readdirSync("./src/Discord/Commands").filter(cmd => cmd.endsWith("js"));
         for (let command of cmds) {
             const cmdobj = require(`./Commands/${command}`);
@@ -29,11 +30,11 @@ class Handler extends Discord.Client {
     }
 
     sendToChannel(channelId, content) {
-       try {
-           return super.sendToChannel(channelId, content);
-       }catch(err) {
-           return false;
-       }
+           return super.sendToChannel(channelId, content).catch(() => {});
+    }
+
+    _dummySend(channelId) {
+        return super.sendToChannel(channelId, {});
     }
 
 }
