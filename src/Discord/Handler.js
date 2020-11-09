@@ -1,27 +1,11 @@
 const Discord = require("discord.js"),
-LevitatingClient = require("levitate.djs"),
-Cooldowns = require("../Util/Cooldowns.js");
+Cooldowns = require("../Util/Cooldowns.js"),
 fs = require("fs");
 
 
-class Handler extends LevitatingClient {
+class Handler extends Discord.Client {
     constructor() {
         super({
-          channels: {
-                cache: false
-          },
-          users: {
-              cache: false,
-              ignoreBots: true
-          },
-          members: {
-             cache: false,
-          },
-          ignoreEmojis: true, 
-          ignorePresences: true,
-          ignoreReactions: true,
-          disabledEvents: ["CHANNEL_CREATE", "CHANNEL_PINS_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "GUILD_EMOJIS_UPDATE", "GUILD_INTEGRATIONS_UPDATE", "GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_MEMBER_UPDATE", "INVITE_CREATE", "INVITE_DELETE", "MESSAGE_REACTION_ADD", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "MESSAGE_REACTION_REMOVE_EMOJI", "MESSAGE_UPDATE", "PRESENCE_UPDATE", "TYPING_START", "USER_UPDATE", "VOICE_SERVER_UPDATE", "VOICE_STATE_UPDATE"]
-        }, {
             messageCacheMaxSize: 0
         });
         this.prefix = "-",

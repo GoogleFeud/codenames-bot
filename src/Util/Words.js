@@ -67,7 +67,9 @@ class Wordlist extends Words {
     constructor() {
        super();
        const data = fs.readFileSync("./assets/Words.txt", {encoding: 'utf8'});
-       this.push(...data.split("\r\n").map(w => w.toLowerCase()));
+       let arr = data.split("\r\n").map(w => w.toLowerCase());
+       if (arr.length == 1) arr = data.split("\n").map(w => w.toLowerCase());
+       this.push(...arr);
     }
   
   }
