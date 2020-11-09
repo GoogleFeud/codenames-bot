@@ -35,9 +35,28 @@ Do `-tutorial` to see the tutorial. There everything is explained in detail.
 
 ## Self-Hosting
 
-If you want to self-host the bot, clone or fork this repository. Then, do `npm i` in the folder where `package.json` is. **You must have node.js version ^12.0.0 installed.**
+### Requirements
 
-**Note:** Do not host on heruko! The `canvas` module breaks if it's hosted on heruko. The board won't be displayed correctly!
+- A Virtual Private Server (VPS) or a website where you can host the bot. (glitch, heroku). The OS of the VPS doesn't matter.
+- Node.js **version ^12.0.0 and up**
+- npm 
+- If your OS is windows, you need the `Windows Build Tools`. Install them via `npm i --global --production windows-build-tools`
+- If your OS is Linux/Ubuntu, you need the `build-essentials` package. Install it via `sudo apt-get install build-essential`
+- A discord bot application. [Here's a good tutorial on how to create a bot application](https://discordjs.guide/preparations/setting-up-a-bot-application.html#creating-your-bot)
+
+### How to run
+
+- Clone this repository
+- Inside the root folder of the repo, run the command `npm i`
+- Create a file in the root folder of the repo called `.env`. Inside it, paste the following:    
+```
+TOKEN=token
+OWNER=id
+``` 
+Where `token` is your bot's token, which you can get from the bot application page, and `id` is your own discord id.    
+- Run `node index` in the root folder of the repo.
+
+### 
 
 ## Bugs, Suggestions, Feedback
 
