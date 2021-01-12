@@ -1,15 +1,10 @@
 
 
 import {User, UserModel, IUser} from "./models/User";
-import {Tournament, TournamentModel} from "./models/Tournament";
-import {TournamentPlayer} from "./models/TournamentPlayer";
-import {TournamentTeam} from "./models/TournamentTeam";
-
-Tournament.hasMany(TournamentTeam, {foreignKey: "tourneyId", as: "teams"});
-TournamentTeam.hasMany(TournamentPlayer, {foreignKey: "teamId", as: "players"});
+import {Guild, GuildModel, IGuild} from "./models/Guild";
 
 const userCache = new Map<string, UserModel>();
-const tournamentCache = new Map<string, TournamentModel>();
+const guildCache = new Map<string, GuildModel>();
 
 export async function getUser(id: string) : Promise<UserModel|undefined> {
     if (userCache.has(id)) return userCache.get(id);
@@ -26,17 +21,28 @@ export async function findOrCreateUser(obj: IUser) : Promise<UserModel> {
     return user;
 }
 
-export async function getTournament(id: string) : Promise<TournamentModel|undefined> {
-    if (tournamentCache.has(id)) return tournamentCache.get(id);
-    const tourney = await Tournament.findByPk(id, {include: {all: true, nested: true}});
-    if(!tourney) return;
-    tournamentCache.set(id, tourney);
-    return tourney;
+export async function deleteUser(id: string) : Promise<void> {
+    if (userCache.has(id)) userCache.delete(id);
+    await User.destroy({where: {id: id} });
+}
+
+export async function getGuild(id: string) : Promise<GuildModel|undefined> {
+    if (guildCache.has(id)) return guildCache.get(id);
+    const guild = await Guild.findByPk(id);
+    if (!guild) return;
+    guildCache.set(id, guild);
+    return guild;
+}
+
+export async function findOrCreateGuild(obj: IGuild) : Promise<GuildModel> {
+    if (guildCache.has(obj.id)) return guildCache.get(obj.id) as GuildModel;
+    const guild = (await Guild.findCreateFind({where: {id: obj.id}, defaults: obj}))[0];
+    guildCache.set(obj.id, guild);
+    return guild;
 }
 
 export async function sync() : Promise<void> {
     await User.sync();
-    await Tournament.sync();
-    await TournamentTeam.sync();
-    await TournamentPlayer.sync();
+    await Guild.sync();
 }
+
