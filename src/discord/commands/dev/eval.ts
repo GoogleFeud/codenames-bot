@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { CommandContext} from "../..";
-//import { respond } from "../../utils";
 import { ARGUMENT_TYPES } from "../../../utils/enums";
 
 export default {
@@ -18,9 +18,9 @@ export default {
     execute: (ctx: CommandContext) : string|undefined => {
         if (!ctx.interaction.member.user || ctx.interaction.member.user.id !== ctx.config.ownerId) return;
         try {
-            return `> Result: ${JSON.stringify(eval(ctx.args.code as string))}`;
+            return `> ℹ️ | Result: ${JSON.stringify(eval(ctx.args.code as string))}`;
         }catch(err) {
-            return `> ${err}`;
+            return `> ❌ | ${err}`;
         }
     }
 };

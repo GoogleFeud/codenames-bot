@@ -6,14 +6,16 @@ export interface IGuild {
     id: string,
     points?: number,
     wins?: number,
-    gamesPlayed?: number
+    gamesPlayed?: number,
+    gameMaster?: string
 }
 
 export interface GuildModel extends Model {
     id: string,
     points: number,
     wins: number,
-    gamesPlayed: number
+    gamesPlayed: number,
+    gameMaster?: string
 }
 
 
@@ -41,6 +43,10 @@ export const Guild = Provider.define<GuildModel>("Guilds", {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0
+    },
+    gameMaster: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 });
 
