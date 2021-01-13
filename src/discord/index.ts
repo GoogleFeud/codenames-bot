@@ -3,6 +3,7 @@ import Discord from "discord.js-light";
 import * as Util from "../utils";
 import * as Database from "../database";
 import { BotConfig } from "..";
+import { Game } from "../codenames/structures/Game";
 
 export function createClient(config: BotConfig) : Discord.Client {
     const client = new Discord.Client({
@@ -21,6 +22,7 @@ export function createClient(config: BotConfig) : Discord.Client {
     });
 
     const commands = new Discord.Collection<string, CommandExecute>();
+    const games = new Discord.Collection<string, Game>();
 
     client.on("ready", () => {
         Database.sync();
@@ -45,7 +47,7 @@ export function createClient(config: BotConfig) : Discord.Client {
             for (const arg of interaction.data.options) {
                 args[arg.name] = arg.value;
             }
-            const res = (commands.get(interaction.data.name) as CommandExecute)({client, args, interaction, config});
+            const res = (commands.get(interaction.data.name) as CommandExecute)({client, args, interaction, config, games});
             if (res) Util.respond(client, interaction, res);
         }
     });
@@ -62,7 +64,8 @@ export interface CommandContext {
     client: Discord.Client,
     args: CommandArgs
     interaction: Interaction,
-    config: BotConfig
+    config: BotConfig,
+    games: Discord.Collection<string, Game>
 }
 
 export interface Command {

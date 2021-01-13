@@ -8,7 +8,8 @@ export interface IUser {
     gamesPlayed?: number,
     assassinHits?: number,
     credits?: number,
-    points?: number
+    points?: number,
+    timesSpymaster?: number
 }
 
 export interface UserModel extends Model {
@@ -17,7 +18,8 @@ export interface UserModel extends Model {
     gamesPlayed: number,
     assassinHits: number,
     credits: number,
-    points: number
+    points: number,
+    timesSpymaster: number
 }
 
 
@@ -39,6 +41,11 @@ export const User = Provider.define<UserModel>("Users", {
         allowNull: false
     },
     assassinHits: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false
+    },
+    timesSpymaster: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
         allowNull: false
