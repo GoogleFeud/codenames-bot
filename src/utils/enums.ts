@@ -10,3 +10,10 @@ export const enum ARGUMENT_TYPES {
     CHANNEL,
     ROLE
 }
+
+export const enum WORD_TYPES {
+    RED,
+    BLUE,
+    NEUTRAL,
+    ASSASSIN
+}
