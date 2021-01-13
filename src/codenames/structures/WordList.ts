@@ -37,6 +37,10 @@ export class WordList extends Array<Word> {
         return this;
     }
 
+    raw() : Array<string> {
+        return this.map(w => w.literal);
+    }
+
     unguessed() : Array<Word> {
         return this.filter(w => !w.guessedBy);
     }

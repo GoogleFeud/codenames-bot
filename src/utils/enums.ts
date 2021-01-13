@@ -19,6 +19,12 @@ export const enum WORD_TYPES {
 }
 
 export const enum TEAMS {
-    RED,
+    RED = 1,
     BLUE
+}
+
+export const enum GUESS_RESPONSE {
+    NO_SUCH_WORD,
+    ALREADY_GUESSED,
+    FINE
 }

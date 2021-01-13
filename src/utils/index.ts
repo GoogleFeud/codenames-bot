@@ -32,3 +32,7 @@ export function shuffle<T>(arr: Array<T>) : Array<T> {
     }
     return arr;
 }
+
+export function rngBtw(min: number, max: number) : number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}

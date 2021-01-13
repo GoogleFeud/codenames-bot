@@ -1,28 +1,38 @@
 
-import {Collection} from "discord.js";
 import { Interaction } from "../../discord";
 import { TEAMS } from "../../utils/enums";
-import { Team } from "./Team";
+import { Grid } from "../Grid";
 import { WordList } from "./WordList";
 
 export class Game {
     id: string
-    teams: Collection<string, Team>
     words: WordList
     started: boolean
     turn?: TEAMS
+    board: Grid
+    masterBoard: Grid
     constructor(channelId: string) {
         this.id = channelId;
-        this.teams = new Collection();
         this.words = new WordList();
         this.started = false;
+        this.board = new Grid();
+        this.masterBoard = new Grid();
     }
 
-    start() : void {
+    start(customWords: Array<string>) : void {
+        customWords;
         throw new Error("NOT_IMPLEMENTED");
     }
 
     determineWinner() : number {
+        throw new Error("NOT IMPLEMENTED");
+    }
+
+    displayTeams() : string {
+        throw new Error("NOT IMPLEMENTED");
+    }
+
+    randomize() : void {
         throw new Error("NOT IMPLEMENTED");
     }
 
@@ -38,6 +48,7 @@ export class Game {
     stop() : void {
         throw new Error("NOT IMPLEMENTED");
     }
+
 
     
 }
