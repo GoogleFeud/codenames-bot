@@ -5,8 +5,12 @@ import { WORD_TYPES } from "../../utils/enums";
 import { shuffle } from "../../utils";
 
 export class WordList extends Array<Word> {
-    constructor(options: WordListOptions) {
+    constructor(options?: WordListOptions) {
         super();
+        if (options) this.insert(options);
+    }
+
+    insert(options: WordListOptions) : this {
         let totalAmount = options.assassin + options.red + options.neutral + options.blue;
         const luckyWords = [];
         if (options.presetWords) {
@@ -30,6 +34,7 @@ export class WordList extends Array<Word> {
             }
         }
         shuffle(this);
+        return this;
     }
 
     unguessed() : Array<Word> {

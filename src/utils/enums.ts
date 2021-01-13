@@ -17,3 +17,8 @@ export const enum WORD_TYPES {
     NEUTRAL,
     ASSASSIN
 }
+
+export const enum TEAMS {
+    RED,
+    BLUE
+}
