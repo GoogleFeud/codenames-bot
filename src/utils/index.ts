@@ -1,4 +1,4 @@
-import { Client, MessageEmbed } from "discord.js-light";
+import { Client, MessageEmbed, MessageEmbedOptions } from "discord.js-light";
 import { Interaction } from "../discord";
 import fs from "fs";
 
@@ -15,7 +15,7 @@ export function getFiles(folder: string) : Array<string> {
     return filePaths;
 }
 
-export function respond(client: Client, interaction: Interaction, data: string|Array<MessageEmbed>) : Promise<unknown> {
+export function respond(client: Client, interaction: Interaction, data: string|Array<MessageEmbed|MessageEmbedOptions>) : Promise<unknown> {
     const bod = typeof data === "string" ? {content: data}:{embeds: data};
     // @ts-expect-error This "hack" is going to be used until discord.js supports global commands
     return client.api.interactions(interaction.id, interaction.token).callback.post({data: {

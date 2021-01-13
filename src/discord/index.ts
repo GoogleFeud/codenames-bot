@@ -1,5 +1,5 @@
 
-import Discord from "discord.js-light";
+import Discord, { MessageEmbedOptions } from "discord.js-light";
 import * as Util from "../utils";
 import * as Database from "../database";
 import { BotConfig } from "..";
@@ -41,13 +41,15 @@ export function createClient(config: BotConfig) : Discord.Client {
         Database.findOrCreateGuild({id: guild.id});
     });
 
-    client.ws.on("INTERACTION_CREATE" as Discord.WSEventType, (interaction: Interaction) => {
+    client.ws.on("INTERACTION_CREATE" as Discord.WSEventType, async (interaction: Interaction) => {
         if (commands.has(interaction.data.name)) {
             const args: CommandArgs = {};
-            for (const arg of interaction.data.options) {
-                args[arg.name] = arg.value;
+            if (interaction.data.options) {
+                for (const arg of interaction.data.options) {
+                    args[arg.name] = arg.value;
+                }
             }
-            const res = (commands.get(interaction.data.name) as CommandExecute)({client, args, interaction, config, games});
+            const res = await (commands.get(interaction.data.name) as CommandExecute)({client, args, interaction, config, games});
             if (res) Util.respond(client, interaction, res);
         }
     });
@@ -56,7 +58,10 @@ export function createClient(config: BotConfig) : Discord.Client {
     return client;
 }
 
-export type CommandExecute = (ctx: CommandContext) => string|undefined;
+
+export type CommandExecute = (ctx: CommandContext) => CommandExecuteRes;
+
+export type CommandExecuteRes = string|Array<MessageEmbedOptions>|undefined;
 
 export type CommandArgs = Record<string, string|number>;
 
@@ -78,8 +83,8 @@ export interface Interaction {
     id: string,
     token: string,
     type: number,
-    guild_id: number,
-    channel_id: number,
+    guild_id: string,
+    channel_id: string,
     member: GuildMember,
     data: InteractionData
 }

@@ -19,7 +19,7 @@ export class Team {
     }
 
     addPlayer(id: string) : Player {
-        const player = new Player(id, this.id);
+        const player = new Player(id, this);
         this.players.set(id, player);
         return player;
     }
@@ -34,6 +34,13 @@ export class Team {
         word.update(this.game.board, false);
         word.update(this.game.masterBoard, true);
         return GUESS_RESPONSE.FINE;
+    }
+
+    get name() : string {
+        switch (this.id) {
+        case TEAMS.RED: return "red";
+        case TEAMS.BLUE: return "blue";
+        }
     }
 
     toString() : string {

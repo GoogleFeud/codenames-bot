@@ -1,10 +1,11 @@
-import { TEAMS } from "../../utils/enums";
+
+import { Team } from "./Team";
 
 
 export class Player {
     id: string
-    team: TEAMS
-    constructor(id: string, team: TEAMS) {
+    team: Team
+    constructor(id: string, team: Team) {
         this.id = id;
         this.team = team;
     }

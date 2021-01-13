@@ -1,7 +1,9 @@
 
+import { MessageEmbedOptions } from "discord.js-light";
 import { rngBtw } from "../../utils";
 import { TEAMS, WORD_TYPES } from "../../utils/enums";
 import {Game} from "../structures/Game";
+import { Player } from "../structures/Player";
 import { Team } from "../structures/Team";
 
 export class NormalGame extends Game {
@@ -11,6 +13,43 @@ export class NormalGame extends Game {
         super(channelId);
         this.red = new Team(this, TEAMS.RED);
         this.blue = new Team(this, TEAMS.BLUE);
+    }
+
+    hasPlayer(id: string) : boolean {
+        return this.red.players.has(id) || this.blue.players.has(id);
+    }
+
+    getPlayer(id: string) : Player|undefined {
+        return this.red.players.get(id) || this.blue.players.get(id);
+    }
+
+    removePlayer(id: string) : void {
+        this.red.players.delete(id) || this.blue.players.delete(id);
+    }
+
+    getPlayerSize() : number {
+        return this.red.players.size + this.blue.players.size;
+    }
+
+    hasTeam(str: string) : boolean {
+        if (str.toLowerCase() === "red" || str.toLowerCase() === "blue") return true;
+        return false;
+    }
+
+    switchTeam(player: Player, team?: string) : void {
+        let teamObj;
+        if (team && this.hasTeam(team)) teamObj = this[team as "red"|"blue"];
+        else if (player.team.id === TEAMS.RED) teamObj = this.blue;
+        else teamObj = this.red;
+        if (!teamObj) return;
+        player.team.players.delete(player.id);
+        player.team = teamObj;
+        teamObj.players.set(player.id, player);
+    }
+
+    createPlayer(id: string, team: string) : Player {
+        if (team !== "red" && team !== "blue") team = "blue";
+        return (this[team as "red"|"blue"]).addPlayer(id);
     }
 
     start(customWords?: Array<string>) : void {
@@ -26,6 +65,7 @@ export class NormalGame extends Game {
         const wordArray = this.words.raw();
         this.board.draw(wordArray);
         this.masterBoard.draw(wordArray);
+        this.started = true;
     }
 
     determineWinner() : number {
@@ -34,6 +74,29 @@ export class NormalGame extends Game {
         else if (this.words.ofType(WORD_TYPES.ASSASSIN, true).some(w => w.guessedBy = this.red.id)) return TEAMS.RED;
         else if (this.words.ofType(WORD_TYPES.ASSASSIN, true).some(w => w.guessedBy === this.blue.id)) return TEAMS.BLUE;
         return 0;
+    }
+
+    display(title?: string) : MessageEmbedOptions {
+        const obj: MessageEmbedOptions = {};
+        obj.fields = [];
+        obj.title = title || "Game info";
+        if (!this.started) {
+            obj.fields.push({ name: this.red.toString(), inline: true, value: this.red.players.map(p => `${p} ${this.red.spymaster && this.red.spymaster.id === p.id ? "🕵️":""}`).join("\n") || "No players!" });
+            obj.fields.push({ name: this.blue.toString(), inline: true, value: this.blue.players.map(p => `${p} ${this.blue.spymaster && this.blue.spymaster.id === p.id ? "🕵️":""}`).join("\n") || "No players!" });
+            obj.footer = {text: "Gamemode: Normal"};
+        }
+        return obj;
+    }
+
+    static fakeDisplay() : MessageEmbedOptions {
+        return {
+            title: "Game Info",
+            fields: [
+                {name: "🔴 Red", value: "No players!", inline: true},
+                {name: "🔵 Blue", value: "No players!", inline: true}
+            ],
+            footer: {text: "Gamemode: Normal"}
+        };
     }
 
     
