@@ -7,8 +7,13 @@ import { shuffle } from "../../utils";
 export class WordList extends Array<Word> {
     constructor(options: WordListOptions) {
         super();
-        const totalAmount = options.assassin + options.red + options.neutral + options.blue;
-        const luckyWords = Words.random(totalAmount);
+        let totalAmount = options.assassin + options.red + options.neutral + options.blue;
+        const luckyWords = [];
+        if (options.presetWords) {
+            luckyWords.push(...options.presetWords);
+            totalAmount -= options.presetWords.length;
+        }
+        luckyWords.push(...Words.random(totalAmount));
         for (const word of luckyWords) {
             if (options.assassin) {
                 this.push(new Word(word, WORD_TYPES.ASSASSIN));
@@ -41,5 +46,6 @@ export interface WordListOptions {
     red: number,
     blue: number,
     assassin: number,
-    neutral: number
+    neutral: number,
+    presetWords?: Array<string>
 }

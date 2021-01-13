@@ -11,6 +11,7 @@ export function getWords() : Array<string> {
 }
 
 export function random(amount = 1) : Array<string> {
+    if (!amount) return [];
     const wordArr = getWords();
     const words: Array<string> = [];
     do {

@@ -5,7 +5,7 @@ const config = require("../config.json") as BotConfig;
 
 (async () => {
     createClient(config);
-    console.log("Bot started!");
+    console.log("Bot booted!");
 })();
 
 export interface BotConfig {
