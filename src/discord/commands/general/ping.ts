@@ -1,6 +1,6 @@
-import { Client } from "discord.js-light";
-import { CommandArgs } from "../..";
+
 //import { respond } from "../../utils";
+import { CommandContext } from "../..";
 import { ARGUMENT_TYPES } from "../../../utils/enums";
 
 export default {
@@ -24,7 +24,7 @@ export default {
             type: ARGUMENT_TYPES.INTEGER
         }
     ],
-    execute: (client: Client, args: CommandArgs) : string|undefined => {
-        return `Your words: ${args.words}`;
+    execute: (ctx: CommandContext) : string|undefined => {
+        return `Your words: ${ctx.args.words}`;
     }
 };

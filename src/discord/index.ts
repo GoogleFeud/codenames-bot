@@ -15,9 +15,9 @@ export function createClient(config: BotConfig) : Discord.Client {
         messageCacheLifetime: 0,
         messageSweepInterval: -1,
         ws: {
-            intents: [Discord.Intents.FLAGS.GUILDS]
+            intents: ["GUILDS"]
         },
-        disabledEvents: ["GUILD_UPDATE", "GUILD_DELETE", "GUILD_ROLE_CREATE", "GUILD_ROLE_UPDATE", "GUILD_ROLE_DELETE", "CHANNEL_CREATE", "CHANNEL_UPDATE", "CHANNEL_DELETE", "CHANNEL_PINS_UPDATE"]
+        disabledEvents: ["GUILD_ROLE_CREATE", "GUILD_ROLE_UPDATE", "GUILD_ROLE_DELETE", "CHANNEL_CREATE", "CHANNEL_UPDATE", "CHANNEL_DELETE", "CHANNEL_PINS_UPDATE"]
     });
 
     const commands = new Discord.Collection<string, CommandExecute>();
@@ -29,10 +29,9 @@ export function createClient(config: BotConfig) : Discord.Client {
             // eslint-disable-next-line @typescript-eslint/no-var-requires
             const cmdObject = require(pathToCmd).default as Command;
             commands.set(cmdObject.name, cmdObject.execute);
+            //if (!cmdObject.devOnly) client.api.applications(client.user.id).commands.post({data: cmdObject});
             // @ts-expect-error This "hack" is going to be used until discord.js supports global commands
-            client.api.applications(client.user.id).commands.post({data: cmdObject});
-            // @ts-expect-error This "hack" is going to be used until discord.js supports global commands
-            if (config.testGuildId) client.api.applications(client.user.id).guilds(config.testGuildId).commands.post({data: cmdObject});
+            if (config.test || cmdObject.devOnly) client.api.applications(client.user.id).guilds(config.devGuildId).commands.post({data: cmdObject});  
         }
     });
 
@@ -46,7 +45,7 @@ export function createClient(config: BotConfig) : Discord.Client {
             for (const arg of interaction.data.options) {
                 args[arg.name] = arg.value;
             }
-            const res = (commands.get(interaction.data.name) as CommandExecute)(client, args, interaction);
+            const res = (commands.get(interaction.data.name) as CommandExecute)({client, args, interaction, config});
             if (res) Util.respond(client, interaction, res);
         }
     });
@@ -55,13 +54,21 @@ export function createClient(config: BotConfig) : Discord.Client {
     return client;
 }
 
-export type CommandExecute = (client: Discord.Client, args: CommandArgs, interaction: Interaction) => string|undefined;
+export type CommandExecute = (ctx: CommandContext) => string|undefined;
 
 export type CommandArgs = Record<string, string|number>;
 
+export interface CommandContext {
+    client: Discord.Client,
+    args: CommandArgs
+    interaction: Interaction,
+    config: BotConfig
+}
+
 export interface Command {
     name: string,
-    execute: CommandExecute;
+    execute: CommandExecute,
+    devOnly?: boolean
 }
 
 export interface Interaction {

@@ -6,11 +6,12 @@ const config = require("../config.json") as BotConfig;
 
 (async () => {
     createClient(config);
-    console.log("HELLO WORLD!");
+    console.log("Bot booted!");
 })();
 
 export interface BotConfig {
     token: string,
     ownerId: string,
-    testGuildId?: string
+    devGuildId: string,
+    test: boolean
 }
