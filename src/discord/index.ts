@@ -4,6 +4,10 @@ import * as Util from "../utils";
 import * as Database from "../database";
 import { BotConfig } from "..";
 import { Game } from "../codenames/structures/Game";
+import { CommandOptions } from "../utils/CommandOptionsBitfield";
+import { GuildModel } from "../database/models/Guild";
+import { Player } from "../codenames/structures/Player";
+
 
 export function createClient(config: BotConfig) : Discord.Client {
     const client = new Discord.Client({
@@ -21,7 +25,7 @@ export function createClient(config: BotConfig) : Discord.Client {
         disabledEvents: ["GUILD_ROLE_CREATE", "GUILD_ROLE_UPDATE", "GUILD_ROLE_DELETE", "CHANNEL_CREATE", "CHANNEL_UPDATE", "CHANNEL_DELETE", "CHANNEL_PINS_UPDATE"]
     });
 
-    const commands = new Discord.Collection<string, CommandExecute>();
+    const commands = new Discord.Collection<string, PartialCommand>();
     const games = new Discord.Collection<string, Game>();
 
     client.on("ready", () => {
@@ -30,10 +34,11 @@ export function createClient(config: BotConfig) : Discord.Client {
         for (const pathToCmd of Util.getFiles(`${__dirname}/commands`)) {
             // eslint-disable-next-line @typescript-eslint/no-var-requires
             const cmdObject = require(pathToCmd).default as Command;
-            commands.set(cmdObject.name, cmdObject.execute);
-            //if (!cmdObject.devOnly) client.api.applications(client.user.id).commands.post({data: cmdObject});
+            commands.set(cmdObject.name, {execute: cmdObject.execute, flags: cmdObject.flags});
             // @ts-expect-error This "hack" is going to be used until discord.js supports global commands
-            if (config.test || cmdObject.devOnly) client.api.applications(client.user.id).guilds(config.devGuildId).commands.post({data: cmdObject});  
+            if (!config.test) client.api.applications(client.user.id).commands.post({data: cmdObject});
+            // @ts-expect-error This "hack" is going to be used until discord.js supports global commands
+            else if (cmdObject.devOnly) client.api.applications(client.user.id).guilds(config.devGuildId).commands.post({data: cmdObject}); 
         }
     });
 
@@ -43,13 +48,31 @@ export function createClient(config: BotConfig) : Discord.Client {
 
     client.ws.on("INTERACTION_CREATE" as Discord.WSEventType, async (interaction: Interaction) => {
         if (commands.has(interaction.data.name)) {
+
+            // Represent the command arguments in a way that's easier to access
             const args: CommandArgs = {};
-            if (interaction.data.options) {
-                for (const arg of interaction.data.options) {
-                    args[arg.name] = arg.value;
+            for (const arg of interaction.data.options || []) args[arg.name] = arg.value;
+
+            const command = commands.get(interaction.data.name) as PartialCommand;
+
+            const game = games.get(interaction.channel_id);
+            const userInGame = game?.getPlayer(interaction.member.user?.id as string);
+            let guildDb;
+            if (command.flags) {
+                if (command.flags.has("REQUIRES_GAME_STARTED") && (!game || !game.started)) return Util.respond(client, interaction, "> ❌ | You can only use this command in-game!");
+                if (command.flags.has("REQUIRES_GAME_NOT_STARTED") && (game && game.started)) return Util.respond(client, interaction, "> ❌ | You can only use this command in the lobby!");
+                if (command.flags.has("REQUIRES_IN_GAME")) {
+                    if (!userInGame || !game) return Util.respond(client, interaction, "> ❌ | You must be in the game in order to use this command!");
+                    if (command.flags.has("REQUIRES_GAMEMASTER")) {
+                        guildDb = await Database.getGuild(interaction.guild_id) as GuildModel;
+                        if (guildDb.gameMaster && !interaction.member.roles.includes(guildDb.gameMaster)) return Util.respond(client, interaction, `> ❌ | You can only use this role if you have the <@&${guildDb.gameMaster}>!`);
+                        if (!game.gameMaster || game.gameMaster.id !== userInGame.id) return Util.respond(client, interaction, "> ❌ | You can only use this command if you are the game master");
+                    }
+                    if (command.flags.has("REQUIRES_SPYMASTER") && (!userInGame.team.spymaster || userInGame.team.spymaster.id !== userInGame.id)) return Util.respond(client, interaction, "> ❌ | You can only use this command if you are the spymaster!");
+                    if (command.flags.has("NO_SPYMASTER") && userInGame.team.spymaster && userInGame.team.spymaster.id === userInGame.id) return Util.respond(client, interaction, "> ❌ | You can only use this command if you are **not** the spymaster!");
                 }
             }
-            const res = await (commands.get(interaction.data.name) as CommandExecute)({client, args, interaction, config, games});
+            const res = await command.execute(({client, args, interaction, config, games, game, player: userInGame}));
             if (res) Util.respond(client, interaction, res);
         }
     });
@@ -70,13 +93,23 @@ export interface CommandContext {
     args: CommandArgs
     interaction: Interaction,
     config: BotConfig,
-    games: Discord.Collection<string, Game>
+    games: Discord.Collection<string, Game>,
+    game?: Game,
+    guildDb?: GuildModel,
+    player?: Player
 }
+
 
 export interface Command {
     name: string,
     execute: CommandExecute,
+    flags?: CommandOptions
     devOnly?: boolean
+}
+
+export interface PartialCommand {
+    execute: CommandExecute,
+    flags?: CommandOptions
 }
 
 export interface Interaction {

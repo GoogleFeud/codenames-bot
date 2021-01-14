@@ -12,6 +12,7 @@ export class Game {
     turn?: TEAMS
     board: Grid
     masterBoard: Grid
+    gameMaster?: Player
     constructor(channelId: string) {
         this.id = channelId;
         this.words = new WordList();
@@ -41,6 +42,10 @@ export class Game {
 
     getPlayer(id: string) : Player|undefined {
         id;
+        throw new Error("NOT IMPLEMENTED");
+    }
+
+    randomPlayer() : Player|undefined {
         throw new Error("NOT IMPLEMENTED");
     }
 

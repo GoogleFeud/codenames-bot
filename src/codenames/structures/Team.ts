@@ -24,6 +24,11 @@ export class Team {
         return player;
     }
 
+    removePlayer(id: string) : boolean {
+        if (this.spymaster && this.spymaster.id === id) delete this.spymaster;
+        return this.players.delete(id);
+    }
+    
     guess(wordTxt: string) : GUESS_RESPONSE {
         const word = this.game.words.find(w => w.literal === wordTxt);
         if (!word) return GUESS_RESPONSE.NO_SUCH_WORD;
@@ -34,6 +39,13 @@ export class Team {
         word.update(this.game.board, false);
         word.update(this.game.masterBoard, true);
         return GUESS_RESPONSE.FINE;
+    }
+
+    get emoji() : string {
+        switch (this.id) {
+        case TEAMS.RED: return "🔴";
+        case TEAMS.BLUE: return "🔵";
+        }
     }
 
     get name() : string {

@@ -16,7 +16,7 @@ export function getFiles(folder: string) : Array<string> {
 }
 
 export function respond(client: Client, interaction: Interaction, data: string|Array<MessageEmbed|MessageEmbedOptions>) : Promise<unknown> {
-    const bod = typeof data === "string" ? {content: data}:{embeds: data};
+    const bod = typeof data === "string" ? {content: data, allowed_mentions: {parse: []}}:{embeds: data, allowed_mentions: {parse: []}};
     // @ts-expect-error This "hack" is going to be used until discord.js supports global commands
     return client.api.interactions(interaction.id, interaction.token).callback.post({data: {
         type: 3,

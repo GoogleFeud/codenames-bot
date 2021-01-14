@@ -1,18 +1,18 @@
 import { CommandContext, CommandExecuteRes } from "../..";
+import { CommandOptions } from "../../../utils/CommandOptionsBitfield";
 
 export default {
     name: "leave",
     description: "Leave the game. Works only when the game hasn't started",
-    execute: (ctx: CommandContext) : CommandExecuteRes => {
-        if (!ctx.interaction.member.user) return;
-        const user = ctx.interaction.member.user;
-        const game = ctx.games.get(ctx.interaction.channel_id);
-        if (!game) return "> ❌ | You are not in the game!";
-        if (game.started) return "> ❌ | The game has already started!";
+    flags: new CommandOptions(["REQUIRES_GAME_NOT_STARTED", "REQUIRES_IN_GAME"]),
+    execute: ({game, games, interaction}: Required<CommandContext>) : CommandExecuteRes => {
+        if (!interaction.member.user) return;
+        const user = interaction.member.user;
 
         if (!game.hasPlayer(user.id)) return "> ❌ | You are not in the game!";
         game.removePlayer(user.id);
-        if (game.getPlayerSize() === 0) ctx.games.delete(ctx.interaction.channel_id);
+        if (game.getPlayerSize() === 0) games.delete(interaction.channel_id);
+        else if (game.gameMaster && game.gameMaster.id === user.id) game.gameMaster = game.randomPlayer();
         return [game.display(`📤 | ${user.username} has left`)];
     }
 };

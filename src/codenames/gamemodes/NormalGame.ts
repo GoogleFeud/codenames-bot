@@ -1,5 +1,5 @@
 
-import { MessageEmbedOptions } from "discord.js-light";
+import { MessageEmbedOptions } from "discord.js";
 import { rngBtw } from "../../utils";
 import { TEAMS, WORD_TYPES } from "../../utils/enums";
 import {Game} from "../structures/Game";
@@ -24,11 +24,15 @@ export class NormalGame extends Game {
     }
 
     removePlayer(id: string) : void {
-        this.red.players.delete(id) || this.blue.players.delete(id);
+        this.red.removePlayer(id) || this.blue.removePlayer(id);
     }
 
     getPlayerSize() : number {
         return this.red.players.size + this.blue.players.size;
+    }
+
+    randomPlayer() : Player|undefined {
+        return rngBtw(0, 1) ? this.red.players.random():this.blue.players.random();
     }
 
     hasTeam(str: string) : boolean {
@@ -42,7 +46,7 @@ export class NormalGame extends Game {
         else if (player.team.id === TEAMS.RED) teamObj = this.blue;
         else teamObj = this.red;
         if (!teamObj) return;
-        player.team.players.delete(player.id);
+        player.team.removePlayer(player.id);
         player.team = teamObj;
         teamObj.players.set(player.id, player);
     }
@@ -71,8 +75,8 @@ export class NormalGame extends Game {
     determineWinner() : number {
         if (this.red.wordsLeft === 0) return TEAMS.RED;
         else if (this.blue.wordsLeft === 0) return TEAMS.BLUE;
-        else if (this.words.ofType(WORD_TYPES.ASSASSIN, true).some(w => w.guessedBy = this.red.id)) return TEAMS.RED;
-        else if (this.words.ofType(WORD_TYPES.ASSASSIN, true).some(w => w.guessedBy === this.blue.id)) return TEAMS.BLUE;
+        else if (this.words.some(w => w.type === WORD_TYPES.ASSASSIN && w.guessedBy && w.guessedBy === this.red.id)) return TEAMS.RED;
+        else if (this.words.some(w => w.type === WORD_TYPES.ASSASSIN && w.guessedBy && w.guessedBy === this.blue.id)) return TEAMS.BLUE;
         return 0;
     }
 
@@ -81,8 +85,8 @@ export class NormalGame extends Game {
         obj.fields = [];
         obj.title = title || "Game info";
         if (!this.started) {
-            obj.fields.push({ name: this.red.toString(), inline: true, value: this.red.players.map(p => `${p} ${this.red.spymaster && this.red.spymaster.id === p.id ? "🕵️":""}`).join("\n") || "No players!" });
-            obj.fields.push({ name: this.blue.toString(), inline: true, value: this.blue.players.map(p => `${p} ${this.blue.spymaster && this.blue.spymaster.id === p.id ? "🕵️":""}`).join("\n") || "No players!" });
+            obj.fields.push({ name: this.red.toString(), inline: true, value: this.red.players.map(p => `${p} ${this.red.spymaster && this.red.spymaster.id === p.id ? "🕵️":""} ${this.gameMaster && this.gameMaster.id === p.id ? "👑":""}`).join("\n") || "No players!" });
+            obj.fields.push({ name: this.blue.toString(), inline: true, value: this.blue.players.map(p => `${p} ${this.blue.spymaster && this.blue.spymaster.id === p.id ? "🕵️":""} ${this.gameMaster && this.gameMaster.id === p.id ? "👑":""}`).join("\n") || "No players!" });
             obj.footer = {text: "Gamemode: Normal"};
         }
         return obj;
