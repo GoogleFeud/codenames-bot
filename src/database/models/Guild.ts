@@ -4,6 +4,7 @@ import {Provider} from "../instance";
 
 export interface IGuild {
     id: string,
+    name?: string,
     points?: number,
     wins?: number,
     gamesPlayed?: number,
@@ -15,6 +16,7 @@ export interface GuildModel extends Model {
     points: number,
     wins: number,
     gamesPlayed: number,
+    name?: string
     gameMaster?: string
 }
 

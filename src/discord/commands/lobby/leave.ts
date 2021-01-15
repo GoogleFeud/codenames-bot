@@ -4,7 +4,7 @@ import { CommandOptions } from "../../../utils/CommandOptionsBitfield";
 export default {
     name: "leave",
     description: "Leave the game. Works only when the game hasn't started",
-    flags: new CommandOptions(["REQUIRES_GAME_NOT_STARTED", "REQUIRES_IN_GAME"]),
+    flags: new CommandOptions(["REQUIRES_GAME_NOT_STARTED", "REQUIRES_IN_GAME", "REQUIRES_GAMEMASTER"]),
     execute: ({game, games, interaction}: Required<CommandContext>) : CommandExecuteRes => {
         if (!interaction.member.user) return;
         const user = interaction.member.user;

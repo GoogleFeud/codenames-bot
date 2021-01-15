@@ -92,11 +92,12 @@ export class NormalGame extends Game {
         return obj;
     }
 
-    static fakeDisplay() : MessageEmbedOptions {
+    static fakeDisplay(title?: string) : MessageEmbedOptions {
         return {
-            title: "Game Info",
+            title: title || "Game Info",
             fields: [
                 {name: "🔴 Red", value: "No players!", inline: true},
+                {name: "\u200b", value: "\u200b", inline: true},
                 {name: "🔵 Blue", value: "No players!", inline: true}
             ],
             footer: {text: "Gamemode: Normal"}

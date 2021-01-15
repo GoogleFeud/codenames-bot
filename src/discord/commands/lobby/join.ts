@@ -26,8 +26,8 @@ export default {
         }
         if (game.hasPlayer(user.id)) game.switchTeam(game.getPlayer(user.id) as Player, args.team as string);
         else {
-            const p = game.createPlayer(user.id, args.team as string);
-            if (!game.gameMaster) game.gameMaster = p;
+            game.createPlayer(user.id, args.team as string);
+            //if (!game.gameMaster) game.gameMaster = p;
         }
         
         return [game.display(`📥 | ${user.username} has joined`)];
