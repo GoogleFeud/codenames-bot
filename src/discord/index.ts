@@ -15,7 +15,7 @@ export function createClient(config: BotConfig) : Discord.Client {
         cacheEmojis: false,
         cacheOverwrites: false,
         cacheGuilds: true,
-        cacheRoles: false,
+        cacheRoles: true,
         cachePresences: false,
         messageCacheLifetime: 0,
         messageSweepInterval: -1,
@@ -123,8 +123,9 @@ export interface Interaction {
 }
 
 export interface GuildMember {
-    user?: User
-    roles: Array<string>
+    user: User
+    roles: Array<string>,
+    nick?: string
 }
 
 export interface User {

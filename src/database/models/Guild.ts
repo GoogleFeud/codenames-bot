@@ -8,7 +8,7 @@ export interface IGuild {
     points?: number,
     wins?: number,
     gamesPlayed?: number,
-    gameMaster?: string
+    gameMaster?: string|null
 }
 
 export interface GuildModel extends Model {
@@ -16,8 +16,8 @@ export interface GuildModel extends Model {
     points: number,
     wins: number,
     gamesPlayed: number,
-    name?: string
-    gameMaster?: string
+    name?: string|null
+    gameMaster?: string|null
 }
 
 

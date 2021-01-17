@@ -32,6 +32,8 @@ export class NormalGame extends Game {
     }
 
     randomPlayer() : Player|undefined {
+        if (!this.red.players.size) return this.blue.players.random();
+        else if (!this.blue.players.size) return this.red.players.random();
         return rngBtw(0, 1) ? this.red.players.random():this.blue.players.random();
     }
 
