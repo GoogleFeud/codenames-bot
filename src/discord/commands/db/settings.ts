@@ -32,11 +32,11 @@ export default {
             if ((!guildDb.gameMaster || !interaction.member.roles.includes(guildDb.gameMaster)) &&
                 (member = await (client.guilds.cache.get(interaction.guild_id) as Guild).members.fetch(interaction.member.user.id, false)) &&
                 (!member.permissions.has("MANAGE_ROLES") || !member.permissions.has("KICK_MEMBERS"))
-            ) return "> ❌ | You need the game master role, the `MANAGE_ROLES` permission, or the `KICK_MEMBERS` permission in order to use this command!";
+            ) return "> ❌ You need the game master role, the `MANAGE_ROLES` permission, or the `KICK_MEMBERS` permission in order to use this command!";
             if (args.gamemaster) guildDb.gameMaster = args.gamemaster as string;
             if (args.name) {
                 const name = args.name as string;
-                if (name.length > 17 || name.length < 3) return "> ❌ | Name must be between 3 and 16 characters!";
+                if (name.length > 17 || name.length < 3) return "> ❌ Name must be between 3 and 16 characters!";
                 guildDb.name = name;
             }
             if (args.reset) {

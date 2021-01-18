@@ -12,6 +12,6 @@ export default {
         game.removePlayer(user.id);
         if (game.getPlayerSize() === 0) games.delete(interaction.channel_id);
         else if (game.gameMaster && game.gameMaster.id === user.id) game.gameMaster = game.randomPlayer();
-        return [game.display(`📤 | <@${user.id}> has left`, "RED")];
+        return [game.display(`📤 <@${user.id}> has left`, "RED")];
     }
 };

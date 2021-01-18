@@ -44,3 +44,7 @@ export function shuffle<T>(arr: Array<T>) : Array<T> {
 export function rngBtw(min: number, max: number) : number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+export function rngArr<T>(arr: Array<T>) : T {
+    return arr[Math.floor(Math.random() * arr.length)];
+}

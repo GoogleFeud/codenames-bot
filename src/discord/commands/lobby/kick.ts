@@ -16,8 +16,8 @@ export default {
         }
     ],
     execute: async ({game, interaction, args}: CommandContext) : Promise<CommandExecuteRes> => {
-        if (!game || !game.hasPlayer(args.player as string)) return `> ❌ | <@${args.player}> isn't in the game.`;
-        if (args.player === interaction.member.user.id) return "> ❌ | You cannot kick yourself.";
+        if (!game || !game.hasPlayer(args.player as string)) return `> ❌ <@${args.player}> isn't in the game.`;
+        if (args.player === interaction.member.user.id) return "> ❌ You cannot kick yourself.";
         game.removePlayer(args.player as string);
         return [game.display(`👢 <@${args.player}> has been kicked by <@${interaction.member.user.id}>`, "RED")];
     }

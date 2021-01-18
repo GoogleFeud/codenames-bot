@@ -1,6 +1,6 @@
 
 import { MessageEmbedOptions } from "discord.js";
-import { rngBtw } from "../../utils";
+import { rngBtw, shuffle } from "../../utils";
 import { TEAMS, WORD_TYPES } from "../../utils/enums";
 import {Game} from "../structures/Game";
 import { Player } from "../structures/Player";
@@ -85,7 +85,24 @@ export class NormalGame extends Game {
     }
     
     randomize() : void {
-        return;
+        const averagePlayerSizePerTeam = Math.floor(this.getPlayerSize() / 2);
+        const allPlayers = [...this.red.players.values(), ...this.blue.players.values()];
+        shuffle(allPlayers);
+        this.red.players.clear();
+        this.blue.players.clear();
+        for (let i=0; i < allPlayers.length; i++) {
+            const player = allPlayers[i];
+            if (i >= averagePlayerSizePerTeam) {
+                this.blue.players.set(player.id, player);
+                player.team = this.blue;
+            }
+            else {
+                this.red.players.set(player.id, player);
+                player.team = this.red;
+            }
+        }
+        this.blue.spymaster = this.blue.players.random();
+        this.red.spymaster = this.red.players.random();
     }
 
     move() : void {
