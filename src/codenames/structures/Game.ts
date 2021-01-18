@@ -5,7 +5,7 @@ import { Grid } from "../Grid";
 import { Player } from "./Player";
 import { WordList } from "./WordList";
 
-export class Game {
+export abstract class Game {
     id: string
     words: WordList
     started: boolean
@@ -21,75 +21,18 @@ export class Game {
         this.masterBoard = new Grid();
     }
 
-    start(customWords: Array<string>) : void {
-        customWords;
-        throw new Error("NOT_IMPLEMENTED");
-    }
-
-    determineWinner() : number {
-        throw new Error("NOT IMPLEMENTED");
-    }
-
-    createPlayer(id: string, team: string) : Player {
-        id; team;
-        throw new Error("NOT IMPLEMENTED");
-    }
-
-    hasPlayer(id: string) : boolean {
-        id;
-        throw new Error("NOT IMPLEMENTED");
-    }
-
-    getPlayer(id: string) : Player|undefined {
-        id;
-        throw new Error("NOT IMPLEMENTED");
-    }
-
-    randomPlayer() : Player|undefined {
-        throw new Error("NOT IMPLEMENTED");
-    }
-
-    getPlayerSize() : number {
-        throw new Error("NOT IMPLEMENTED");
-    }
-
-    removePlayer(id: string) : void {
-        id;
-        throw new Error("NOT IMPLEMENTED");
-    }
-
-    switchTeam(player: Player, team?: string) : void {
-        player;
-        team;
-        throw new Error("NOT IMPLEMENTED");
-    }
-
-    hasTeam(str: string) : boolean {
-        str;
-        throw new Error("NOT IMPLEMENTED");
-    }
-
-    displayTeams() : string {
-        throw new Error("NOT IMPLEMENTED");
-    }
-
-    randomize() : void {
-        throw new Error("NOT IMPLEMENTED");
-    }
-
-    display(title?: string) : MessageEmbedOptions {
-        title;
-        throw new Error("NOT IMPLEMENTED");
-    }
-
-    move() : void {
-        throw new Error("NOT IMPLEMENTED");
-    }
-
-    stop() : void {
-        throw new Error("NOT IMPLEMENTED");
-    }
-
-
-    
+    abstract start(customWords: Array<string>) : void
+    abstract determineWinner() : number
+    abstract createPlayer(id: string, team: string) : Player
+    abstract hasPlayer(id: string) : boolean
+    abstract getPlayer(id: string) : Player|undefined
+    abstract randomPlayer() : Player|undefined
+    abstract getPlayerSize() : number
+    abstract removePlayer(id: string) : void
+    abstract switchTeam(player: Player, team?: string) : void
+    abstract hasTeam(str: string) : boolean
+    abstract randomize() : void
+    abstract display(description?: string, color?: string) : MessageEmbedOptions
+    abstract move() : void
+    abstract stop() : void
 }

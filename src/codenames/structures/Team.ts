@@ -35,6 +35,7 @@ export class Team {
         if (word.guessedBy) return GUESS_RESPONSE.ALREADY_GUESSED;
         word.guessedBy = this.id;
         if (this.guesses !== undefined) this.guesses--;
+        if (this.wordsLeft && word.type === this.id as number) this.wordsLeft--;
         if (!this.canEnd) this.canEnd = true;
         word.update(this.game.board, false);
         word.update(this.game.masterBoard, true);

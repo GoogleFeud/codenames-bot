@@ -5,6 +5,8 @@ import { TEAMS, WORD_TYPES } from "../../utils/enums";
 import {Game} from "../structures/Game";
 import { Player } from "../structures/Player";
 import { Team } from "../structures/Team";
+import { Util } from "discord.js";
+
 
 export class NormalGame extends Game {
     red: Team
@@ -81,11 +83,24 @@ export class NormalGame extends Game {
         else if (this.words.some(w => w.type === WORD_TYPES.ASSASSIN && w.guessedBy && w.guessedBy === this.blue.id)) return TEAMS.BLUE;
         return 0;
     }
+    
+    randomize() : void {
+        return;
+    }
 
-    display(title?: string) : MessageEmbedOptions {
+    move() : void {
+        return;
+    }
+
+    stop() : void {
+        return;
+    }
+
+    display(description?: string, color?: string) : MessageEmbedOptions {
         const obj: MessageEmbedOptions = {};
         obj.fields = [];
-        obj.title = title || "Game info";
+        if (description) obj.description = description;
+        if (color) obj.color = Util.resolveColor(color);
         if (!this.started) {
             obj.fields.push({ name: this.red.toString(), inline: true, value: this.red.players.map(p => `${p} ${this.red.spymaster && this.red.spymaster.id === p.id ? "🕵️":""} ${this.gameMaster && this.gameMaster.id === p.id ? "👑":""}`).join("\n") || "No players!" });
             obj.fields.push({ name: this.blue.toString(), inline: true, value: this.blue.players.map(p => `${p} ${this.blue.spymaster && this.blue.spymaster.id === p.id ? "🕵️":""} ${this.gameMaster && this.gameMaster.id === p.id ? "👑":""}`).join("\n") || "No players!" });
@@ -94,9 +109,8 @@ export class NormalGame extends Game {
         return obj;
     }
 
-    static fakeDisplay(title?: string) : MessageEmbedOptions {
+    static fakeDisplay() : MessageEmbedOptions {
         return {
-            title: title || "Game Info",
             fields: [
                 {name: "🔴 Red", value: "No players!", inline: true},
                 {name: "\u200b", value: "\u200b", inline: true},

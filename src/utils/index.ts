@@ -15,14 +15,15 @@ export function getFiles(folder: string) : Array<string> {
     return filePaths;
 }
 
-export function respond(client: Client, interaction: Interaction, data: string|Array<MessageEmbedOptions>) : Promise<unknown> {
+export function respond(client: Client, interaction: Interaction, data: string|Array<MessageEmbedOptions>, clientOnly = false) : Promise<unknown> {
     let bod: Record<string, unknown> = {};
-    if (typeof data === "string") bod = {content: data, allowed_mentions: {parse: []}};
+    if (typeof data === "string") bod = {content: data, allowed_mentions: {parse: []}, flags: 1 << 6};
     else {
         const firstEmbed = data[0];
         if (!firstEmbed.footer) firstEmbed.footer = {text: interaction.member.nick || interaction.member.user.username};
         else firstEmbed.footer.text += ` | ${interaction.member.nick || interaction.member.user.username}`;
         bod = {embeds: data, allowed_mentions: {parse: []}};
+        if (clientOnly) bod.flags = 1 << 6;
     }
     // @ts-expect-error This "hack" is going to be used until discord.js supports global commands
     return client.api.interactions(interaction.id, interaction.token).callback.post({data: {

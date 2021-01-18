@@ -25,15 +25,18 @@ export default {
             game = new NormalGame(interaction.channel_id);
             games.set(interaction.channel_id, game);
         }
-        if (game.hasPlayer(user.id)) game.switchTeam(game.getPlayer(user.id) as Player, args.team as string);
+        if (game.hasPlayer(user.id)) {
+            const player = game.getPlayer(user.id) as Player;
+            game.switchTeam(game.getPlayer(user.id) as Player, args.team as string);
+            return [game.display(`📥 | <@${user.id}> has switched their team to ${player.team.emoji}`, "GREEN")];
+        }
         else {
             const player = game.createPlayer(user.id, args.team as string);
             if (!game.gameMaster) {
                 const guildDb = await Database.getGuild(interaction.guild_id) as GuildModel;
                 if (!guildDb.gameMaster) game.gameMaster = player;
             }
+            return [game.display(`📥 | <@${user.id}> has joined`, "GREEN")];
         }
-        
-        return [game.display(`📥 | ${user.username} has joined`)];
     }
 };

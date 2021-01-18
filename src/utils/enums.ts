@@ -12,7 +12,7 @@ export const enum ARGUMENT_TYPES {
 }
 
 export const enum WORD_TYPES {
-    RED,
+    RED = 1,
     BLUE,
     NEUTRAL,
     ASSASSIN

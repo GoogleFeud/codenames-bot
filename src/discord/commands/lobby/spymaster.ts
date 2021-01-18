@@ -25,11 +25,11 @@ export default {
             const newSpymaster = game.getPlayer(args.player as string);
             if (!newSpymaster) return `> ❌ | <@${args.player}> isn't in the game!`;
             newSpymaster.team.spymaster = newSpymaster;
-            return [game.display()];
+            return [game.display(`🕵🏻 | <@${args.player} is now the spymaster for the ${newSpymaster.team.emoji} team.`)];
         } else {
             if (!game || !player) return "> ❌ | You are not in the game!";
             player.team.spymaster = player;
-            return [game.display(`${interaction.member.user?.username} is now the spymaster for the ${player.team.emoji} team`)];
+            return [game.display(`🕵🏻 | <@${interaction.member.user.id}> is now the spymaster for the ${player.team.emoji} team.`, "BROWN")];
         } 
     }
 };

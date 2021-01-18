@@ -56,20 +56,20 @@ export function createClient(config: BotConfig) : Discord.Client {
             const command = commands.get(interaction.data.name) as PartialCommand;
 
             const game = games.get(interaction.channel_id);
-            const userInGame = game?.getPlayer(interaction.member.user?.id as string);
+            const userInGame = game?.getPlayer(interaction.member.user.id);
             let guildDb;
             if (command.flags) {
                 if (command.flags.has("REQUIRES_GAME_STARTED") && (!game || !game.started)) return Util.respond(client, interaction, "> ❌ | You can only use this command in-game.");
                 if (command.flags.has("REQUIRES_GAME_NOT_STARTED") && (game && game.started)) return Util.respond(client, interaction, "> ❌ | You can only use this command in the lobby.");
                 if (command.flags.has("REQUIRES_IN_GAME")) {
                     if (!userInGame || !game) return Util.respond(client, interaction, "> ❌ | You must be in the game in order to use this command.");
-                    if (command.flags.has("REQUIRES_GAMEMASTER")) {
-                        guildDb = await Database.getGuild(interaction.guild_id) as GuildModel;
-                        if (guildDb.gameMaster && !interaction.member.roles.includes(guildDb.gameMaster)) return Util.respond(client, interaction, `> ❌ | You can only use this role if you have the <@&${guildDb.gameMaster}> role.`);
-                        else if (!guildDb.gameMaster && (!game.gameMaster || game.gameMaster.id !== userInGame.id)) return Util.respond(client, interaction, "> ❌ | You can only use this command if you are the game master.");
-                    }
                     if (command.flags.has("REQUIRES_SPYMASTER") && (!userInGame.team.spymaster || userInGame.team.spymaster.id !== userInGame.id)) return Util.respond(client, interaction, "> ❌ | You can only use this command if you are the spymaster.");
                     if (command.flags.has("NO_SPYMASTER") && userInGame.team.spymaster && userInGame.team.spymaster.id === userInGame.id) return Util.respond(client, interaction, "> ❌ | You can only use this command if you are **not** the spymaster.");
+                }
+                if (command.flags.has("REQUIRES_GAMEMASTER")) {
+                    guildDb = await Database.getGuild(interaction.guild_id) as GuildModel;
+                    if (guildDb.gameMaster && !interaction.member.roles.includes(guildDb.gameMaster)) return Util.respond(client, interaction, `> ❌ | You can only use this role if you have the <@&${guildDb.gameMaster}> role.`);
+                    else if (game && game.gameMaster && game.gameMaster.id !== interaction.member.user.id) return Util.respond(client, interaction, "> ❌ | You can only use this command if you are the game master.");
                 }
             }
             const res = await command.execute(({client, args, interaction, config, games, game, player: userInGame, guildDb})); 
